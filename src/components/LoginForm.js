@@ -1,0 +1,251 @@
+import React, { Component } from "react";
+import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
+import { Redirect, Route } from 'react-router-dom'
+import { Container, Row, Col } from 'react-bootstrap';
+
+
+class LoginForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: "",
+      password: "",
+      username: "",
+      isLoading: true,
+      signUpError: "",
+      registerForm: false,
+      token: this.props.token,
+      validSession: false,
+      toHome: false
+    };
+  }
+
+  validateForm() {
+    return this.state.email.length > 0 && this.state.password.length > 0;
+  }
+
+  handleChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
+  }
+  register = event => {
+    this.setState({ registerForm: true })
+  }
+  backToLogin = event => {
+    this.setState({ registerForm: false })
+  }
+  handleLogin = event => {
+    this.setState({ isLoading: true })
+    event.preventDefault();
+    const {
+      email,
+      password,
+    } = this.state;
+    fetch('/api/account/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (!json.success) {
+          this.setState({
+            signUpError: json.message
+          })
+          alert("invalid login")
+        }
+        this.props.saveToken(json.token)
+        localStorage.setItem('tokenItem', json.token);
+        this.setState({ toHome: true, isLoading: false })
+
+
+      });
+  }
+  handleSubmit = event => {
+    this.setState({ isLoading: true })
+    event.preventDefault();
+    const {
+      email,
+      password,
+      username
+    } = this.state;
+    fetch('/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        username: username
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        console.log('json', json);
+        if (json.success) {
+          this.setState({
+            signUpError: json.message,
+            isLoading: false,
+            email: '',
+            password: '',
+            username: ''
+          });
+          this.setState({ registerForm: false })
+        } else {
+          this.setState({
+            signUpError: json.message,
+            isLoading: false,
+          });
+          alert("Username or email taken! Try again.")
+        }
+      });
+
+  }
+  componentDidMount() {
+
+    fetch('/api/account/verify', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': this.state.token
+      }
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.setState({
+            validSession: true
+          });
+        } else {
+          this.setState({
+            validSession: false
+          });
+        }
+      });
+    this.setState({ isLoading: false })
+  }
+  render() {
+    if (this.state.toHome) {
+      return <Redirect to='/' />
+    }
+    if (this.state.isLoading) {
+      return (
+        <Container> <div className="text-center"><h2 className="text-center">Loading ... </h2> </div></Container>
+      )
+    }
+    if (this.state.registerForm) {
+      return (
+        <Container>
+          <div className="Login">
+            <form onSubmit={this.handleSubmit}>
+              <FormGroup controlId="email" bsSize="large">
+                <FormLabel>Email  </FormLabel>
+                <FormControl
+                  autoFocus
+                  type="email"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="username" bsSize="large">
+                <FormLabel>Username  </FormLabel>
+                <FormControl
+                  value={this.state.username}
+                  onChange={this.handleChange}
+                  type="username"
+                />
+              </FormGroup>
+              <FormGroup controlId="password" bsSize="large">
+                <FormLabel>Password  </FormLabel>
+                <FormControl
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                  type="password"
+                />
+              </FormGroup>
+              <Button
+                block
+                bsSize="large"
+                disabled={!this.validateForm()}
+                type="submit"
+              >
+                Register
+            </Button>
+              <br></br>
+              <Button
+                block
+                bsSize="small"
+                type="submit"
+                onClick={this.backToLogin}
+              >
+                Go Back
+            </Button>
+
+            </form>
+          </div>
+        </Container>
+      );
+    }
+    if (!this.state.token || this.state.validSession === false) {
+      return (
+        <Container>
+          <div>
+            <p>Login in here: </p>
+            <form onSubmit={this.handleLogin}>
+              <FormGroup controlId="email" bsSize="large">
+                <FormLabel>Email  </FormLabel>
+                <FormControl
+                  autoFocus
+                  type="email"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="password" bsSize="large">
+                <FormLabel>Password  </FormLabel>
+                <FormControl
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                  type="password"
+                />
+              </FormGroup>
+              <Button
+                block
+                bsSize="large"
+                disabled={!this.validateForm()}
+                type="submit"
+              >
+                Login
+                </Button>
+
+            </form>
+            <br></br>
+
+
+            <Button
+              block
+              bsSize="large"
+              type="button"
+              onClick={this.register}>
+              Register
+          </Button>
+          </div>
+        </Container>
+      )
+    }
+    return (
+      <div>
+        <p>Signed in</p>
+        <div><Redirect to="/home" /></div>
+      </div>
+    );
+  }
+
+}
+
+export default LoginForm
