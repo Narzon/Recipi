@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import './App.css';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import EnterPage from './components/EnterPage'
 import LoginForm from './components/LoginForm'
 import Home from './components/Home'
@@ -50,7 +50,9 @@ class App extends Component {
       <Router>
         <div className="App">
           <header style={{ backgroundColor: "#9be0d1" }}>
-            <h1 className="Recipi"> Recipi </h1>
+            <h1 onClick={()=>{
+                window.location.href = '/'
+              }} className="Recipi"> Recipi </h1>
           </header>
           <body style={{ backgroundColor: "#dff5f0", color: "#49786e" }}>
             <Route exact path="/" render={(routeProps) => (

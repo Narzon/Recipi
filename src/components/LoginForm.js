@@ -21,6 +21,7 @@ class LoginForm extends Component {
     };
   }
 
+  //make sure user has provided both inputs
   validateForm() {
     return this.state.email.length > 0 && this.state.password.length > 0;
   }
@@ -30,12 +31,14 @@ class LoginForm extends Component {
       [event.target.id]: event.target.value
     });
   }
+  //methods handle whether or not to render the registration form
   register = event => {
     this.setState({ registerForm: true })
   }
   backToLogin = event => {
     this.setState({ registerForm: false })
   }
+  //attempt to login
   handleLogin = event => {
     this.setState({ isLoading: true })
     event.preventDefault();
@@ -54,19 +57,22 @@ class LoginForm extends Component {
       }),
     }).then(res => res.json())
       .then(json => {
+        //if server cannot authenticate, alert user
         if (!json.success) {
           this.setState({
             signUpError: json.message
           })
           alert("invalid login")
+        ///otherwise, save token to state and localstorage and attempt to send user to home
+        } else {
+          this.props.saveToken(json.token)
+          localStorage.setItem('tokenItem', json.token);
+          this.setState({ toHome: true, isLoading: false })
         }
-        this.props.saveToken(json.token)
-        localStorage.setItem('tokenItem', json.token);
-        this.setState({ toHome: true, isLoading: false })
-
 
       });
   }
+  //attempt to register new user
   handleSubmit = event => {
     this.setState({ isLoading: true })
     event.preventDefault();
@@ -88,6 +94,7 @@ class LoginForm extends Component {
     }).then(res => res.json())
       .then(json => {
         console.log('json', json);
+        //if registration is successful, alert user to success and return to login
         if (json.success) {
           this.setState({
             signUpError: json.message,
@@ -98,6 +105,7 @@ class LoginForm extends Component {
           });
           this.setState({ registerForm: false })
         } else {
+        //if registration is unsuccessful (doe to username or email being taken already), alert use to try again
           this.setState({
             signUpError: json.message,
             isLoading: false,
@@ -108,7 +116,7 @@ class LoginForm extends Component {
 
   }
   componentDidMount() {
-
+    //on mounting, attempt to validate any current token in state
     fetch('/api/account/verify', {
       method: 'GET',
       headers: {
@@ -130,14 +138,17 @@ class LoginForm extends Component {
     this.setState({ isLoading: false })
   }
   render() {
+    //if successful login is indicated, return to entrypage with new token
     if (this.state.toHome) {
       return <Redirect to='/' />
     }
+    //display Loading ... if appropriate
     if (this.state.isLoading) {
       return (
         <Container> <div className="text-center"><h2 className="text-center">Loading ... </h2> </div></Container>
       )
     }
+    //if it exists in state, render a registration form instead of login
     if (this.state.registerForm) {
       return (
         <Container>
@@ -191,6 +202,7 @@ class LoginForm extends Component {
         </Container>
       );
     }
+    //if there is no token currently in state, or if there is a token that fails authentication, render the login form
     if (!this.state.token || this.state.validSession === false) {
       return (
         <Container>
@@ -238,6 +250,7 @@ class LoginForm extends Component {
         </Container>
       )
     }
+    //by default, send user to home (assumes authentication has not failed)
     return (
       <div>
         <p>Signed in</p>

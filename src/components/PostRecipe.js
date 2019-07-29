@@ -17,6 +17,7 @@ class PostRecipe extends React.Component {
         //this.props.user
 
     }
+    //post input data as new recipe to server
     handleSubmit = event => {
         this.setState({isLoading: true})
         event.preventDefault();
@@ -50,10 +51,14 @@ class PostRecipe extends React.Component {
         }).then(res => res.json())
             .then(json => {
             console.log('json', json);
+            //upon successful posting, go back
             if (json.success) {
                 alert("Recipi saved!")
                 this.props.goBack()
-            } 
+            } else {
+                //else, alert user of error and remain on page
+                alert("Failed! Server error.")
+            }
         });
 
     }
@@ -64,6 +69,7 @@ class PostRecipe extends React.Component {
         });
     }
     render() {
+        //render an input form for a new recipe
         return (<div className="col">
         <h2 className="text-center">Here's your form, {this.props.user}</h2>
             <form onSubmit={this.handleSubmit}>

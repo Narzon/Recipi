@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap';
 import { Button } from "react-bootstrap";
+import RecipeDescription from "./RecipeDescription"
 import PostRecipe from './PostRecipe'
 
 
@@ -25,6 +26,7 @@ class Home extends React.Component {
     this.plusRating = this.plusRating.bind(this);
   }
   componentDidMount() {
+    //verify token
     this.setState({ isLoading: true })
     fetch('/api/account/verify', {
       method: 'GET',
@@ -50,20 +52,24 @@ class Home extends React.Component {
       });
 
   }
+  //method capitalizes first letter of all words, used for titles etc.
   capitalize_Words(str){
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-}
+  }
+  //method renders an input form for new recipes
   showInput() {
     this.setState({ inputRecipe: <Container><div className="row align-items-center justify-content-center"><PostRecipe user={this.state.userData} goBack={this.goBack} /></div></Container> })
-
   }
+  //props function in recipe input form, used to return to main page
   goBack() {
     this.loadRecipes()
     this.setState({ inputRecipe: "" })
   }
+  //method capitalizes only the first letter in a string, used for descriptions etc.
   jsUcfirst(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
+  //method increments a recipe's rating by +1 if user has not already voted
   plusRating(title, index) {
     let self = this
     fetch('/api/user/didvote', {
@@ -114,6 +120,7 @@ class Home extends React.Component {
         }
       });
   }
+  //method increments a recipe's rating by -1 if user has not already voted
   minusRating(title, index) {
     let self = this
     fetch('/api/user/didvote', {
@@ -165,6 +172,7 @@ class Home extends React.Component {
       });
 
   }
+  //method fetches all recipes from database, sorts by rating in descending order, and formats them for display
   loadRecipes() {
     let self = this
     this.setState({ isLoading: true })
@@ -209,14 +217,17 @@ class Home extends React.Component {
 
 
   }
+  //method shows a detailed description of recipe upon clicking
   showDesc(recipe) {
+    let self = this
     let arrayOfElements = []
     for (let i = 0; i < recipe.ingredients.length; i++) {
       arrayOfElements.push(<div>{`\u2022`} {recipe.ingredients[i]}<br></br></div>)
     }
-    let newComponent = <Container><h1>{this.capitalize_Words(recipe.title)}</h1> <p>by {recipe.user}</p> <img className="img-fluid" src={recipe.image}></img> {arrayOfElements} <br></br> <p>{recipe.longDescription}</p><p>{recipe.instructions}</p><br></br><Button onClick={()=>{this.setState({recipeDescription: ""})}}>Go Back</Button></Container>
+    let newComponent = <RecipeDescription title={this.capitalize_Words(recipe.title)} user={recipe.user} imgSrc={recipe.image} elements={arrayOfElements} longDesc={recipe.longDescription} instructions={recipe.instructions} goBack={()=>{self.setState({recipeDescription: ""})}}  />
     this.setState({recipeDescription: newComponent})
   }
+  //logs user out of current session
   logout(token) {
     this.setState({ isLoading: true })
     fetch('/api/account/logout', {
@@ -233,19 +244,25 @@ class Home extends React.Component {
 
   }
   render() {
+    //if content is loading, display Loading ... screen
     if (this.state.isLoading) {
       return <Container> <div className="text-center"><h2 className="text-center">Loading ... </h2> </div></Container>
     }
+    //if a description exists in state, display that component
     if (this.state.recipeDescription) {
       return this.state.recipeDescription
     }
+    //after logging out of session, return to entry page
     if (this.state.logout) {
       return <Redirect to='/' />
     }
+    //if input form exists in state, display that component
     if (this.state.inputRecipe) {
       return this.state.inputRecipe
     }
+    //check for token
     if (this.state.token) {
+      //if token is valid and user successfully authenticates, display main recipes page
       if (this.state.isLoggedIn) {
         return (<Container>
 
@@ -268,7 +285,9 @@ class Home extends React.Component {
       } else {
         return (<Container><div className="text-center"><p>Loading ... </p></div></Container>)
       }
-    } else if (!this.state.token) {
+    } 
+    //if no token exists to authenticate, return to entrypage 
+    else if (!this.state.token) {
       return (<div><Redirect to="/" /></div>)
     }
   }
