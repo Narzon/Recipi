@@ -29,7 +29,7 @@ function startServer() {
   app.get("/api/testpublic", function (req, res) {
     res.send("Anyone can see this");
   });
-  app.use(express.static("build"));
+  app.use(express.static("server/public"));
   app.use(bodyParser.json());
   app.use(userRoutes);
   app.use(sessionRoutes);
@@ -37,7 +37,7 @@ function startServer() {
   app.use(userVotedRoutes)
 
   app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname + '/../build/index.html'));
+    res.sendFile(path.join(__dirname + './public/index.html'));
   });
 
   //heroku injects the port number into the PORT env value
