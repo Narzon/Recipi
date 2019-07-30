@@ -28,6 +28,7 @@ class Home extends React.Component {
   componentDidMount() {
     //verify token
     this.setState({ isLoading: true })
+    console.log("this is happening")
     fetch('/api/account/verify', {
       method: 'GET',
       headers: {
@@ -36,6 +37,7 @@ class Home extends React.Component {
       }
     }).then(res => res.json())
       .then(json => {
+        console.log("json.success is "+json.success)
         if (json.success) {
           this.setState({
             isLoggedIn: true,
@@ -174,6 +176,7 @@ class Home extends React.Component {
   }
   //method fetches all recipes from database, sorts by rating in descending order, and formats them for display
   loadRecipes() {
+
     let self = this
     this.setState({ isLoading: true })
     return fetch('/api/recipes', {

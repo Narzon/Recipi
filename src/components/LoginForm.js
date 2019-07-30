@@ -116,6 +116,7 @@ class LoginForm extends Component {
 
   }
   componentDidMount() {
+    this.setState({ isLoading: true })
     //on mounting, attempt to validate any current token in state
     fetch('/api/account/verify', {
       method: 'GET',
@@ -125,6 +126,7 @@ class LoginForm extends Component {
       }
     }).then(res => res.json())
       .then(json => {
+        console.log('json', json);
         if (json.success) {
           this.setState({
             validSession: true
@@ -134,13 +136,14 @@ class LoginForm extends Component {
             validSession: false
           });
         }
+        this.setState({ isLoading: false })
       });
-    this.setState({ isLoading: false })
+    
   }
   render() {
     //if successful login is indicated, return to entrypage with new token
     if (this.state.toHome) {
-      return <Redirect to='/' />
+      return <Redirect to='/home' />
     }
     //display Loading ... if appropriate
     if (this.state.isLoading) {

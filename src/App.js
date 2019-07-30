@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import './App.css';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import EnterPage from './components/EnterPage'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import LoginForm from './components/LoginForm'
 import Home from './components/Home'
 
@@ -55,8 +54,8 @@ class App extends Component {
               }} className="Recipi"> Recipi </h1>
           </header>
           <body style={{ backgroundColor: "#dff5f0", color: "#49786e" }}>
-            <Route exact path="/" render={(routeProps) => (
-              <EnterPage {...routeProps} token={this.state.token} saveToken={this.saveToken} />
+            <Route exact path="/" render={() => (
+              <Redirect to="/login"/>
             )} />
             <Route exact path="/login" render={(routeProps) => (
               <LoginForm {...routeProps} token={this.state.token} saveToken={this.saveToken} />
