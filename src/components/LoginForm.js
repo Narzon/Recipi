@@ -93,7 +93,6 @@ class LoginForm extends Component {
       }),
     }).then(res => res.json())
       .then(json => {
-        console.log('json', json);
         //if registration is successful, alert user to success and return to login
         if (json.success) {
           this.setState({
@@ -126,7 +125,6 @@ class LoginForm extends Component {
       }
     }).then(res => res.json())
       .then(json => {
-        console.log('json', json);
         if (json.success) {
           this.setState({
             validSession: true

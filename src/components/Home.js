@@ -28,7 +28,6 @@ class Home extends React.Component {
   componentDidMount() {
     //verify token
     this.setState({ isLoading: true })
-    console.log("this is happening")
     fetch('/api/account/verify', {
       method: 'GET',
       headers: {
@@ -37,7 +36,6 @@ class Home extends React.Component {
       }
     }).then(res => res.json())
       .then(json => {
-        console.log("json.success is "+json.success)
         if (json.success) {
           this.setState({
             isLoggedIn: true,
@@ -147,7 +145,6 @@ class Home extends React.Component {
             })
           }).then((res) => { return res.json() }).then((json) => {
             if (json.success) {
-              //this.loadRecipes()
               let newRecipe = {}
               fetch('/api/recipes/find', {
                 method: 'POST',
@@ -189,8 +186,6 @@ class Home extends React.Component {
           return b.rating - a.rating
         })
         for (let i = 0; i < json.length; i++) {
-          console.log("user is "+json[i].user)
-          console.log("recipe title is "+json[i].title)
           let recipeItem = fetch('/api/user/didvote', {
             method: 'POST',
             headers: {
@@ -203,8 +198,6 @@ class Home extends React.Component {
             }),
           }).then(res => res.json())
             .then(goodJson => {
-              console.log("goodJson is: ")
-              console.dir(goodJson)
             if (goodJson.success) {
               return <Col key={i} xs="6" sm="4"><div style={{ textAlign: "left"}}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={()=>{this.showDesc(json[i])}} src={json[i].image} id="imgClick" className="img-fluid"></img><Button style={{border: "1px solid black"}} variant="light" onClick={() => { this.plusRating(json[i].title, i) }}> + </Button><Button style={{border: "1px solid black"}} variant="light" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> <p>Rating: {json[i].rating} </p><br></br></div></Col>
             } else {

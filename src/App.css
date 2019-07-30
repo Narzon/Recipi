@@ -32,6 +32,9 @@
 #imgClick {
   cursor: pointer;
 }
+#headerClick {
+  cursor: pointer;
+}
 
 #footerHTML {
   background-color: #9be0d1;

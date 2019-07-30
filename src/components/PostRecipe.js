@@ -50,7 +50,6 @@ class PostRecipe extends React.Component {
             }),
         }).then(res => res.json())
             .then(json => {
-            console.log('json', json);
             //upon successful posting, go back
             if (json.success) {
                 alert("Recipi saved!")

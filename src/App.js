@@ -48,7 +48,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <header style={{ backgroundColor: "#9be0d1" }}>
+          <header id="headerClick" style={{ backgroundColor: "#9be0d1" }}>
             <h1 onClick={()=>{
                 window.location.href = '/'
               }} className="Recipi"> Recipi </h1>
