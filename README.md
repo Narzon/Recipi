@@ -1,69 +1,29 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Recipi
 
-## Available Scripts
+Project created and maintained by Nicolai Antonov
 
-In the project directory, you can run:
+This web app seeks to provide users with the ability to submit custom recipes, and then rank those recipes by aggregated votes.
 
-### `npm start`
+In future updates, the app will utilize the Google Maps API library to connect recipes based on restaurant dishes to the location of said restaurant. This will allow users to search for and submit recipes based on proximity.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+e.g., User 1 in Austin submits a taco recipe based on a taco they had at Torchy's, and links it to Torchy's upon submitting. User 2 then searches for recipes based in Austin, and comes across User 1's taco recipe 
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+This project is designed to demonstrate full-stack development and deployment, utilization of fetch API, and secure hashing/encryption for managing user authentication and sessions
 
-### `npm test`
+Technologies used include:
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Front-end:
+React and Create-React-App
+Bootstrap and React-Bootstrap
 
-### `npm run build`
+Back-end:
+Node.js and Express
+MongoDB+Mongoose
+Bcrypt
+JSONWebToken
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To contact me:
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-# Recipi
+Nicolai Antonov
+nantonov@utexas.edu
+https://www.linkedin.com/in/nicolaiantonov/
