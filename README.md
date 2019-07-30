@@ -1,5 +1,7 @@
 # Recipi
 
+https://myrecipi.herokuapp.com/home
+
 Project created and maintained by Nicolai Antonov
 
 This web app seeks to provide users with the ability to submit custom recipes, and then rank those recipes by aggregated votes.
