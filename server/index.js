@@ -37,7 +37,7 @@ function startServer() {
   app.use(userVotedRoutes)
 
   app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname + './public/index.html'));
+    res.sendFile(path.join(__dirname + '/public/index.html'));
   });
 
   //heroku injects the port number into the PORT env value
