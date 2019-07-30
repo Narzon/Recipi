@@ -13,6 +13,7 @@ class App extends Component {
     this.saveToken = this.saveToken.bind(this);
   }
   componentDidMount() {
+    document.title = "Recipi"
 
     //check if there exists a token in localStorage already, and if so, try to verify it
     if (this.state.token === "" && localStorage.getItem('tokenItem')) {
