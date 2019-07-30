@@ -1,6 +1,6 @@
 # Recipi
 
-https://myrecipi.herokuapp.com/home
+https://myrecipi.herokuapp.com/
 
 Project created and maintained by Nicolai Antonov
 
