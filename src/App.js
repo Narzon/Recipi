@@ -34,10 +34,7 @@ class App extends Component {
             console.log("token is valid")
           } else {
             //otherwise, clear local storage and state 
-            localStorage.setItem('tokenItem', "");
-            this.setState({
-              token: ""
-            });
+            this.saveToken("")
           }
         });
     }
