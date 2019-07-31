@@ -17,6 +17,7 @@ Technologies used include:
 Front-end:
 - React and Create-React-App
 - Bootstrap and React-Bootstrap
+- React Router
 
 Back-end:
 - Node.js and Express
