@@ -226,17 +226,9 @@ class Home extends React.Component {
   //logs user out of current session
   logout(token) {
     this.setState({ isLoading: true })
-    fetch('/api/account/logout', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'token': token
-      }
-    }).then((res) => {
-      res.json()
-      this.props.saveToken("")
-      this.setState({ logout: true, isLoggedIn: false, isLoading: false })
-    })
+    //NOW STATELESS - simply clear token from client-side
+    this.props.saveToken("")
+    this.setState({ logout: true, isLoggedIn: false, isLoading: false })
 
   }
   render() {

@@ -1,5 +1,4 @@
 require("dotenv").config();
-const UserSession = require('../models/UserSession');
 const User = require("../models/UserModel");
 var jwt = require('jsonwebtoken');
 
@@ -49,54 +48,22 @@ function signin(req, res, next) {
       });
     }
     // Otherwise correct user
-    const userSession = new UserSession();
     let token = jwt.sign({ userEmail: email, userName: user.username }, process.env.secretKey, { expiresIn: '1h' })
-    userSession.userId = user._id;
-    userSession.isDeleted = false
-    userSession.token = token
-    userSession.save((err, doc) => {
-      if (err) {
-        console.log(err);
-        return res.send({
-          success: false,
-          message: 'Error: server error'
-        });
-      }
-      return res.send({
-        success: true,
-        message: 'Valid sign in',
-        token: token
-      });
-    });
+
+   return res.send({
+     success: true,
+     message: "valid sign in",
+    token: token
+   })
   });
 };
 
+//DEFUNCT - now using stateless authentication, server-side logout unnecessary
 function logout(req, res, next) {
-  // Get the token
-  const token = req.headers.token
-  // ?token=test
-  // Verify the token is one of a kind and it's not deleted.
-  UserSession.findOneAndReplace({
-    token: token,
-    isDeleted: false
-  },
-    {
-      token: token,
-      isDeleted: true
-    }
-    , null, (err, sessions) => {
-      if (err) {
-        console.log(err);
-        return res.send({
-          success: false,
-          message: 'Error: Server error'
-        });
-      }
-      return res.send({
-        success: true,
-        message: 'Good'
-      });
-    });
+   return res.send({
+     success: false,
+     message: "server-side logout defunct"
+   })
 }
 
 function verify(req, res, next) {
@@ -104,45 +71,21 @@ function verify(req, res, next) {
   if (req.headers) {
     var token = req.headers.token
   } else {
-    console.log("couldnt find res.headers ??")
-    console.dir(req)
     return res.send({ success: false, message: 'Error: Server error' })
   }
-  // ?token=test
-  // Verify the token is one of a kind and it's not deleted.
-  UserSession.find({
-    token: token,
-    isDeleted: false
-  }, (err, sessions) => {
-    if (err) {
-      console.log(err);
-      return res.send({
-        success: false,
-        message: 'Error: Server error'
-      });
-    }
-    if (sessions.length != 1) {
-      return res.send({
-        success: false,
-        message: 'Error: Invalid'
-      });
-    } else {
-      try {
-        let userData = jwt.verify(token, process.env.secretKey)
-        return res.send({
-          success: true,
-          message: 'Good',
-          userData: userData
-        });
-      } catch (err) {
-        res.send({
-          success: false,
-          message: "Bad"
-        })
-      }
-        
-    }
-  });
+  try {
+    let userData = jwt.verify(token, process.env.secretKey)
+    return res.send({
+      success: true,
+      message: "Good, verification success",
+      userData: userData
+    });
+  } catch (err) {
+    return res.send({
+      success: false,
+      message: "Bad, verification failed"
+    })
+  }
 }
 
 exports.verify = verify

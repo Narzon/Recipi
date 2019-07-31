@@ -43,6 +43,8 @@ class App extends Component {
     }
   }
   saveToken(token) {
+    console.log("saveToken is called with token: "+token)
+    localStorage.setItem('tokenItem', token)
     this.setState({ token: token })
   }
   render() {
