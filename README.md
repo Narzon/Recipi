@@ -10,7 +10,7 @@ In future updates, the app will utilize the Google Maps API library to connect r
 
 >e.g., User 1 in Austin submits a taco recipe based on a taco they had at Torchy's, and links it to Torchy's upon submitting. User 2 then searches for recipes based in Austin, and comes across User 1's taco recipe 
 
-This project is designed to demonstrate full-stack development and deployment, utilization of fetch API, and secure hashing/encryption for managing user authentication and sessions
+This project is designed to demonstrate full-stack development and deployment via MERN stack, stateless authentication, utilization of fetch API, and secure hashing/encryption
 
 Technologies used include:
 
