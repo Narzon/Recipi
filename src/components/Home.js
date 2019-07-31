@@ -58,7 +58,7 @@ class Home extends React.Component {
   }
   //method renders an input form for new recipes
   showInput() {
-    this.setState({ inputRecipe: <Container><div className="row align-items-center justify-content-center"><PostRecipe user={this.state.userData} goBack={this.goBack} /></div></Container> })
+    this.setState({ inputRecipe: <Container><div className="row align-items-center justify-content-center"><PostRecipe user={this.state.userData} token={this.state.token} goBack={this.goBack} /></div></Container> })
   }
   //props function in recipe input form, used to return to main page
   goBack() {
@@ -79,7 +79,8 @@ class Home extends React.Component {
       },
       body: JSON.stringify({
         user: this.state.userData,
-        recipeTitle: title
+        recipeTitle: title,
+        token: this.state.token
       }),
     }).then(res => res.json())
       .then(json => {
@@ -90,7 +91,8 @@ class Home extends React.Component {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              title: title
+              title: title,
+              token: this.state.token
             }),
           }).then((res) => { return res.json() }).then((json) => {
             if (json.success) {
@@ -102,7 +104,8 @@ class Home extends React.Component {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                  title: title
+                  title: title,
+                  token: this.state.token
                 }),
               }).then((res) => {
                 return res.json()
@@ -130,7 +133,8 @@ class Home extends React.Component {
       },
       body: JSON.stringify({
         user: this.state.userData,
-        recipeTitle: title
+        recipeTitle: title,
+        token: this.state.token
       }),
     }).then(res => res.json())
       .then(json => {
@@ -141,7 +145,8 @@ class Home extends React.Component {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              title: title
+              title: title,
+              token: this.state.token
             })
           }).then((res) => { return res.json() }).then((json) => {
             if (json.success) {
@@ -152,7 +157,8 @@ class Home extends React.Component {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                  title: title
+                  title: title,
+                  token: this.state.token
                 }),
               }).then((res) => {
                 return res.json()
@@ -177,7 +183,10 @@ class Home extends React.Component {
     let self = this
     this.setState({ isLoading: true })
     return fetch('/api/recipes', {
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        'token': this.state.token
+      },
     })
       .then(res => res.json())
       .then(json => {
@@ -194,7 +203,8 @@ class Home extends React.Component {
             body: JSON.stringify({
               user: self.state.userData,
               recipeTitle: json[i].title,
-              dontChange: true
+              dontChange: true,
+              token: this.state.token
             }),
           }).then(res => res.json())
             .then(goodJson => {

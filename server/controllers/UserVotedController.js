@@ -1,8 +1,17 @@
 const UserVoted = require("../models/UserVoted");
+require("dotenv").config();
+var jwt = require('jsonwebtoken');
 
 function create(req, res, next) {
-  let { user, recipeTitle, dontChange } = req.body;
-
+  let { user, recipeTitle, dontChange, token } = req.body;
+  try {
+    let userData = jwt.verify(token, process.env.secretKey)
+  } catch (err) {
+    return res.send({
+      success: false,
+      message: "Bad, verification failed"
+    })
+  }
   UserVoted.find({
     user: user,
     recipeTitle: recipeTitle

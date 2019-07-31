@@ -40,6 +40,7 @@ class PostRecipe extends React.Component {
             'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                token: this.props.token,
                 user: this.props.user,
                 title: title,
                 description: shortDesc,

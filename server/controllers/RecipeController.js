@@ -1,7 +1,22 @@
 const Recipe = require("../models/RecipeModel");
+require("dotenv").config();
+var jwt = require('jsonwebtoken');
 
 function show(req, res, next) {
-    let { username } = req.body;
+  if (req.headers) {
+    var token = req.headers.token
+    var username = req.headers.username
+  } else {
+    return res.send({ success: false, message: 'Error: Server error' })
+  }
+    try {
+      let userData = jwt.verify(token, process.env.secretKey)
+    } catch (err) {
+      return res.send({
+        success: false,
+        message: "Bad, verification failed"
+      })
+    }
     Recipe.find({
         user: username
         }, (err, result) => {
@@ -15,7 +30,15 @@ function show(req, res, next) {
     });
 }
 function showOne(req, res, next) {
-  let { title } = req.body;
+  let { title, token } = req.body;
+  try {
+    let userData = jwt.verify(token, process.env.secretKey)
+  } catch (err) {
+    return res.send({
+      success: false,
+      message: "Bad, verification failed"
+    })
+  }
   Recipe.find({
     title: title
   }, (err, result) => {
@@ -29,6 +52,19 @@ function showOne(req, res, next) {
   })
 }
 function showAll(req, res, next) {
+  if (req.headers) {
+    var token = req.headers.token
+  } else {
+    return res.send({ success: false, message: 'Error: Server error' })
+  }
+  try {
+    let userData = jwt.verify(token, process.env.secretKey)
+  } catch (err) {
+    return res.send({
+      success: false,
+      message: "Bad, verification failed"
+    })
+  }
     Recipe.find({
         }, (err, result) => {
         if (err) {
@@ -41,8 +77,15 @@ function showAll(req, res, next) {
     })
 }
 function create(req, res, next) {
-    let { user, title, ingredients, description, longDescription, instructions, image, restaurant} = req.body;
-  
+    let { token, user, title, ingredients, description, longDescription, instructions, image, restaurant } = req.body;
+    try {
+      let userData = jwt.verify(token, process.env.secretKey)
+    } catch (err) {
+      return res.send({
+        success: false,
+        message: "Bad, verification failed"
+      })
+    }
     if (!user) {
       return res.send({
         success: false,
@@ -125,24 +168,36 @@ function create(req, res, next) {
     });
 }
 function changeRating(req, res, next) {
-  let { title } = req.body
+  let { title, token } = req.body
+  try {
+    let userData = jwt.verify(token, process.env.secretKey)
+  } catch (err) {
+    return res.send({
+      success: false,
+      message: "Bad, verification failed"
+    })
+  }
   Recipe.findOneAndUpdate({ title: title }, { $inc: { rating: 1 } }, function(err, result) {
     if (err) {
-      console.log(err)
       res.send({success: false, message: "Server error"});
    } else {
-      console.log(result)
       res.send({ success: true, message: "Rating incremented" });
    }})
 }
 function changeRatingLess(req, res, next) {
-  let { title } = req.body
+  let { title, token } = req.body
+  try {
+    let userData = jwt.verify(token, process.env.secretKey)
+  } catch (err) {
+    return res.send({
+      success: false,
+      message: "Bad, verification failed"
+    })
+  }
   Recipe.findOneAndUpdate({ title: title }, { $inc: { rating: -1 } }, function(err, result) {
     if (err) {
-      console.log(err)
       res.send({success: false, message: "Server error"});
    } else {
-      console.log(result)
       res.send({ success: true, message: "Rating incremented down" });
    }})
 }
