@@ -208,7 +208,7 @@ class LoginForm extends Component {
       return (
         <Container>
           <div>
-            <p>Login in here: </p>
+            <p>Login here: </p>
             <form onSubmit={this.handleLogin}>
               <FormGroup controlId="email" bsSize="large">
                 <FormLabel>Email  </FormLabel>
