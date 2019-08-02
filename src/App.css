@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: #9be0d1
+  font-family: 'Quicksand', sans-serif;
 }
 
 .App-logo {
@@ -36,10 +36,6 @@
   cursor: pointer;
 }
 
-#footerHTML {
-  background-color: #9be0d1;
-}
-
 html, body {
   margin: 0;
   padding: 0;
@@ -51,8 +47,7 @@ header,
 section,
 footer {
     margin: 0;
-    padding: 1px;
-    background-color: #9be0d1;
+    padding: 1px
 }
 
 

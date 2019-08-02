@@ -48,12 +48,12 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <header id="headerClick" style={{ backgroundColor: "#9be0d1" }}>
+          <header id="headerClick" style={{ backgroundColor: "#6dc4ed" }}>
             <h1 onClick={()=>{
                 window.location.href = '/'
               }} className="Recipi"> Recipi </h1>
           </header>
-          <body style={{ backgroundColor: "#dff5f0", color: "#49786e" }}>
+          <body style={{ backgroundColor: "#e6f5fc", color: "#1c7fad", fontFamily: "Quicksand" }}>
             <Route exact path="/" render={() => (
               <Redirect to="/login"/>
             )} />
@@ -65,7 +65,7 @@ class App extends Component {
             )} />
             <br></br>
           </body>
-          <footer style={{ backgroundColor: "#9be0d1" }}>Website built by Nicolai Antonov, 2019</footer>
+          <footer style={{ backgroundColor: "#6dc4ed" }}>Website built by Nicolai Antonov, 2019</footer>
         </div>
       </Router>
     )

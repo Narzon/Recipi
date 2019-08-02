@@ -63,6 +63,7 @@ class LoginForm extends Component {
             signUpError: json.message
           })
           alert("invalid login")
+          this.setState({ isLoading: false })
         ///otherwise, save token to state and localstorage and attempt to send user to home
         } else {
           this.props.saveToken(json.token)
