@@ -23,7 +23,8 @@ class Home extends React.Component {
       recipeTitleByIndex: [],
       filtRecipes: [],
       myRecipes: [<div><h3>Nothing to show!</h3></div>],
-      showMyRecipes: false
+      showMyRecipes: false,
+      toggleMyRecipesText: "Show my Recipes"
     }
     this.goBack = this.goBack.bind(this);
     this.showInput = this.showInput.bind(this);
@@ -314,9 +315,9 @@ class Home extends React.Component {
   }
   toggleMyRecipes() {
     if (this.state.showMyRecipes) {
-      this.setState({showMyRecipes: false})
+      this.setState({showMyRecipes: false, toggleMyRecipesText: "Show my Recipes"})
     } else {
-      this.setState({showMyRecipes: true})
+      this.setState({showMyRecipes: true, toggleMyRecipesText: "Show all Recipes"})
     }
   }
   //logs user out of current session
@@ -374,7 +375,7 @@ class Home extends React.Component {
 
           <div className="text-center">
             <Button className="btn" variant="secondary" onClick={this.showInput}>Post a Recipi</Button>    <span> </span>
-            <Button className="btn" variant="secondary" onClick={this.toggleMyRecipes}>Toggle my Recipis</Button>
+            <Button className="btn" variant="secondary" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>
           </div>
           <br></br>
 
