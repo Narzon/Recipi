@@ -186,6 +186,7 @@ class LoginForm extends Component {
                 bsSize="large"
                 disabled={!this.validateForm()}
                 type="submit"
+                variant="info"
               >
                 Register
             </Button>
@@ -194,6 +195,7 @@ class LoginForm extends Component {
                 block
                 bsSize="small"
                 type="submit"
+                variant="info"
                 onClick={this.backToLogin}
               >
                 Go Back
@@ -233,6 +235,7 @@ class LoginForm extends Component {
                 bsSize="large"
                 disabled={!this.validateForm()}
                 type="submit"
+                variant="info"
               >
                 Login
                 </Button>
@@ -245,6 +248,7 @@ class LoginForm extends Component {
               block
               bsSize="large"
               type="button"
+              variant="info"
               onClick={this.register}>
               Register
           </Button>

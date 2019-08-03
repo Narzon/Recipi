@@ -22,7 +22,7 @@ class Home extends React.Component {
       searchTerm: "",
       recipeTitleByIndex: [],
       filtRecipes: [],
-      myRecipes: [<div><h3>Nothing to show!</h3></div>],
+      myRecipes: [<h3>Nothing to show!</h3>],
       showMyRecipes: false,
       toggleMyRecipesText: "Show My Recipis"
     }
@@ -68,24 +68,28 @@ class Home extends React.Component {
         searchTerm: newSearch
       });
     } else {
+      //if this method is being called from a context without any event, continue using existing search term
       newSearch = this.state.searchTerm
     }
-    
+
+    //convert search term to lowercase
     let lcSearch = newSearch.toLowerCase()
     let allRecipes = this.state.recipes
+    //map over all recipes
     let newFiltRecipes = allRecipes.map((recipe) => {
       let compareTitle = this.state.recipeTitleByIndex[recipe.key]
-      if(compareTitle.includes(lcSearch)) {
+      //if title of recipe includes the search term, return it to the new filtered array
+      if (compareTitle.includes(lcSearch)) {
         return recipe
       } else {
         return <div></div>
       }
     })
-    this.setState({filtRecipes: newFiltRecipes})
+    this.setState({ filtRecipes: newFiltRecipes })
   }
   //method capitalizes first letter of all words, used for titles etc.
-  capitalize_Words(str){
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  capitalize_Words(str) {
+    return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
   }
   //method renders an input form for new recipes
   showInput() {
@@ -144,20 +148,20 @@ class Home extends React.Component {
                 newRecipe = result[0]
                 let newRecipeArray = [...self.state.recipes]
                 let ratingButtons = <div><p>Already voted!</p> <p>Rating: {newRecipe.rating} </p></div>
-                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={()=>{self.showDesc(newRecipe, ratingButtons)}} src={newRecipe.image} id="imgClick" className="img-fluid" style={{boxShadow: "1px 3px 1px #9E9E9E"}}></img>{ratingButtons}<br></br></div></Col>
+                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={() => { self.showDesc(newRecipe, ratingButtons) }} src={newRecipe.image} id="imgClick" className="img-fluid shadow p-1 mb-3 rounded" ></img>{ratingButtons}<br></br></div></Col>
                 self.setState({ recipes: newRecipeArray })
 
                 //if page is currently displayed a recipe description, refresh the component to display new rating properly
-                if(self.state.recipeDescription){
-                  self.setState({recipeDescription: ""})
+                if (self.state.recipeDescription) {
+                  self.setState({ recipeDescription: "" })
                   self.showDesc(newRecipe, ratingButtons)
                 }
                 //if there is currently a search term filtering results, refresh the filtering to display new rating properly
-                if(self.state.searchTerm) {
+                if (self.state.searchTerm) {
                   self.handleSearch()
                 }
                 //if user is currently viewing their own recipes, refresh the list to update rankings properly
-                if(self.state.showMyRecipes) {
+                if (self.state.showMyRecipes) {
                   self.loadRecipes()
                 }
 
@@ -213,20 +217,20 @@ class Home extends React.Component {
                 newRecipe = result[0]
                 let newRecipeArray = [...self.state.recipes]
                 let ratingButtons = <div><p>Already voted!</p> <p>Rating: {newRecipe.rating} </p></div>
-                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={()=>{self.showDesc(newRecipe, ratingButtons)}} src={newRecipe.image} id="imgClick" className="img-fluid" style={{boxShadow: "1px 3px 1px #9E9E9E"}}></img>{ratingButtons}<br></br></div></Col>
+                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={() => { self.showDesc(newRecipe, ratingButtons) }} src={newRecipe.image} id="imgClick" className="img-fluid shadow p-1 mb-3 rounded" ></img>{ratingButtons}<br></br></div></Col>
                 self.setState({ recipes: newRecipeArray })
 
                 //if page is currently displayed a recipe description, refresh the component to display new rating properly
-                if(self.state.recipeDescription){
-                  self.setState({recipeDescription: ""})
+                if (self.state.recipeDescription) {
+                  self.setState({ recipeDescription: "" })
                   self.showDesc(newRecipe, ratingButtons)
                 }
                 //if there is currently a search term filtering results, refresh the filtering to display new rating properly
-                if(self.state.searchTerm) {
+                if (self.state.searchTerm) {
                   self.handleSearch()
                 }
                 //if user is currently viewing their own recipes, refresh the list to update rankings properly
-                if(self.state.showMyRecipes) {
+                if (self.state.showMyRecipes) {
                   self.loadRecipes()
                 }
 
@@ -255,6 +259,7 @@ class Home extends React.Component {
       .then(json => {
         let allRecipes = []
         let myRecipes = []
+        //sort by rating in descending order
         json.sort(function (a, b) {
           return b.rating - a.rating
         })
@@ -273,29 +278,29 @@ class Home extends React.Component {
             }),
           }).then(res => res.json())
             .then(goodJson => {
-            let ratingButtons = ""
-            if (goodJson.success) {
-              ratingButtons = <div><Button style={{border: "1px solid black"}} variant="light" onClick={() => { this.plusRating(json[i].title, i) }}> + </Button><Button style={{border: "1px solid black"}} variant="light" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> <p>Rating: {json[i].rating} </p></div>
-            } else {
-              ratingButtons = <div><p>Already voted!</p> <p>Rating: {json[i].rating} </p></div>
-            }
-            let recipeTitleByIndex = self.state.recipeTitleByIndex
-            recipeTitleByIndex[i] = json[i].title
-            self.setState({recipeTitleByIndex: recipeTitleByIndex})
+              let ratingButtons = ""
+              if (goodJson.success) {
+                ratingButtons = <div><Button style={{ border: "1px solid black" }} variant="light" onClick={() => { this.plusRating(json[i].title, i) }}> + </Button><Button style={{ border: "1px solid black" }} variant="light" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> <p>Rating: {json[i].rating} </p></div>
+              } else {
+                ratingButtons = <div><p>Already voted!</p> <p>Rating: {json[i].rating} </p></div>
+              }
+              let recipeTitleByIndex = self.state.recipeTitleByIndex
+              recipeTitleByIndex[i] = json[i].title
+              self.setState({ recipeTitleByIndex: recipeTitleByIndex })
 
-            // if current user is the author of a recipe, add it to their own array
-            if (self.state.userData === json[i].user){
-              console.log("adding a recipe to the myRecipes array. recipe author is: "+json[i].user+" and current user is: "+self.state.userData)
-              myRecipes.push(<Col key={i} xs="6" sm="4"><div style={{ textAlign: "left"}}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={()=>{this.showDesc(json[i], ratingButtons)}} src={json[i].image} id="imgClick" className="img-fluid" style={{boxShadow: "1px 3px 1px #9E9E9E"}}></img>{ratingButtons}<br></br></div></Col>)
-            }
+              // if current user is the author of a recipe, add it to their own array
+              if (self.state.userData === json[i].user) {
+                console.log("adding a recipe to the myRecipes array. recipe author is: " + json[i].user + " and current user is: " + self.state.userData)
+                myRecipes.push(<Col key={i} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={() => { this.showDesc(json[i], ratingButtons) }} src={json[i].image} id="imgClick" className="img-fluid shadow p-1 mb-3 rounded" ></img>{ratingButtons}<br></br></div></Col>)
+              }
 
-            return <Col key={i} xs="6" sm="4"><div style={{ textAlign: "left"}}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={()=>{this.showDesc(json[i], ratingButtons)}} src={json[i].image} id="imgClick" className="img-fluid" style={{boxShadow: "1px 3px 1px #9E9E9E"}}></img>{ratingButtons}<br></br></div></Col>
-          })
+              return <Col key={i} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={() => { this.showDesc(json[i], ratingButtons) }} src={json[i].image} id="imgClick" className="img-fluid shadow p-1 mb-3 rounded" ></img>{ratingButtons}<br></br></div></Col>
+            })
           allRecipes.push(recipeItem)
         }
-        Promise.all(allRecipes).then((allRecipes)=> {
+        Promise.all(allRecipes).then((allRecipes) => {
           if (!myRecipes[0]) {
-            myRecipes.push(<div><h3>Nothing to show!</h3></div>)
+            myRecipes.push(<h3>Nothing to show!</h3>)
           }
           this.setState({ recipes: allRecipes, myRecipes: myRecipes, isLoading: false })
         })
@@ -310,14 +315,14 @@ class Home extends React.Component {
     for (let i = 0; i < recipe.ingredients.length; i++) {
       arrayOfElements.push(<div>{`\u2022`} {recipe.ingredients[i]}<br></br></div>)
     }
-    let newComponent = <RecipeDescription ratingButtons={ratingButtons} title={this.capitalize_Words(recipe.title)} user={recipe.user} imgSrc={recipe.image} elements={arrayOfElements} longDesc={recipe.longDescription} instructions={recipe.instructions} goBack={()=>{self.setState({recipeDescription: ""})}}  />
-    this.setState({recipeDescription: newComponent})
+    let newComponent = <RecipeDescription ratingButtons={ratingButtons} title={this.capitalize_Words(recipe.title)} user={recipe.user} imgSrc={recipe.image} elements={arrayOfElements} longDesc={recipe.longDescription} instructions={recipe.instructions} goBack={() => { self.setState({ recipeDescription: "" }) }} />
+    this.setState({ recipeDescription: newComponent })
   }
   toggleMyRecipes() {
     if (this.state.showMyRecipes) {
-      this.setState({showMyRecipes: false, toggleMyRecipesText: "Show My Recipis"})
+      this.setState({ showMyRecipes: false, toggleMyRecipesText: "Show My Recipis" })
     } else {
-      this.setState({showMyRecipes: true, toggleMyRecipesText: "Show All Recipis"})
+      this.setState({ showMyRecipes: true, toggleMyRecipesText: "Show All Recipis" })
     }
   }
   //logs user out of current session
@@ -363,19 +368,19 @@ class Home extends React.Component {
 
           <h3 className="text-center"> Welcome {this.state.userData}, check out these Recipis!</h3>
           <Form>
-              <Form.Group controlId="formSearchTerms">
+            <Form.Group controlId="formSearchTerms">
               <Form.Control
                 value={this.state.searchTerm}
-                onChange={this.handleSearch} 
-                type="search" 
+                onChange={this.handleSearch}
+                type="search"
                 placeholder="Search Recipi titles ..." />
-              </Form.Group>
+            </Form.Group>
           </Form>
           <br></br>
 
           <div className="text-center">
-            <Button className="btn" variant="secondary" onClick={this.showInput}>Post a Recipi</Button>    <span> </span>
-            <Button className="btn" variant="secondary" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>
+            <Button className="btn" variant="info" onClick={this.showInput}>Post a Recipi</Button>    <span> </span>
+            <Button className="btn" variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>
           </div>
           <br></br>
 
@@ -390,7 +395,7 @@ class Home extends React.Component {
       } else {
         return (<Container><div className="text-center"><p>Loading ... </p></div></Container>)
       }
-    } 
+    }
     //if no token exists to authenticate, return to entrypage 
     else if (!this.state.token) {
       return (<div><Redirect to="/" /></div>)

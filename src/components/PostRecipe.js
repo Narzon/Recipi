@@ -126,11 +126,12 @@ class PostRecipe extends React.Component {
                     block
                     bsSize="large"
                     type="submit"
+                    variant="info"
                 >
                     Submit your Recipi!
                 </Button>
                 <br></br>
-                <Button onClick={this.props.goBack}>Go back</Button>
+                <Button variant="info" onClick={this.props.goBack}>Go back</Button>
             </form>
         </div>)
     }
