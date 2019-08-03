@@ -375,6 +375,7 @@ class Home extends React.Component {
               <Form.Control
                 value={this.state.searchTerm}
                 onChange={this.handleSearch}
+                onSubmit={(e)=>{e.preventDefault()}}
                 type="search"
                 placeholder="Search Recipi titles ..." />
             </Form.Group>
