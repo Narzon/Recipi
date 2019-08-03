@@ -54,7 +54,7 @@ class PostRecipe extends React.Component {
             //upon successful posting, go back
             if (json.success) {
                 alert("Recipi saved!")
-                this.props.goBack()
+                this.props.goBack(true)
             } else {
                 //else, alert user of error and remain on page
                 alert("Failed! Server error.")
@@ -131,7 +131,7 @@ class PostRecipe extends React.Component {
                     Submit your Recipi!
                 </Button>
                 <br></br>
-                <Button variant="info" onClick={this.props.goBack}>Go back</Button>
+                <Button variant="info" onClick={()=>{this.props.goBack(false)}}>Go back</Button>
             </form>
         </div>)
     }

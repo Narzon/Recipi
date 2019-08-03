@@ -50,4 +50,8 @@ footer {
     padding: 1px
 }
 
+.btn-info {
+  background-color: #6EC2F0 !important;
+  border-color: #325470 !important;
 
+}
