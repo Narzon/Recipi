@@ -24,7 +24,7 @@ class Home extends React.Component {
       filtRecipes: [],
       myRecipes: [<div><h3>Nothing to show!</h3></div>],
       showMyRecipes: false,
-      toggleMyRecipesText: "Show my Recipes"
+      toggleMyRecipesText: "Show My Recipis"
     }
     this.goBack = this.goBack.bind(this);
     this.showInput = this.showInput.bind(this);
@@ -144,7 +144,7 @@ class Home extends React.Component {
                 newRecipe = result[0]
                 let newRecipeArray = [...self.state.recipes]
                 let ratingButtons = <div><p>Already voted!</p> <p>Rating: {newRecipe.rating} </p></div>
-                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={()=>{self.showDesc(newRecipe, ratingButtons)}} src={newRecipe.image} id="imgClick" className="img-fluid"></img>{ratingButtons}<br></br></div></Col>
+                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={()=>{self.showDesc(newRecipe, ratingButtons)}} src={newRecipe.image} id="imgClick" className="img-fluid" style={{boxShadow: "1px 3px 1px #9E9E9E"}}></img>{ratingButtons}<br></br></div></Col>
                 self.setState({ recipes: newRecipeArray })
 
                 //if page is currently displayed a recipe description, refresh the component to display new rating properly
@@ -213,7 +213,7 @@ class Home extends React.Component {
                 newRecipe = result[0]
                 let newRecipeArray = [...self.state.recipes]
                 let ratingButtons = <div><p>Already voted!</p> <p>Rating: {newRecipe.rating} </p></div>
-                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={()=>{self.showDesc(newRecipe, ratingButtons)}} src={newRecipe.image} id="imgClick" className="img-fluid"></img>{ratingButtons}<br></br></div></Col>
+                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={()=>{self.showDesc(newRecipe, ratingButtons)}} src={newRecipe.image} id="imgClick" className="img-fluid" style={{boxShadow: "1px 3px 1px #9E9E9E"}}></img>{ratingButtons}<br></br></div></Col>
                 self.setState({ recipes: newRecipeArray })
 
                 //if page is currently displayed a recipe description, refresh the component to display new rating properly
@@ -286,10 +286,10 @@ class Home extends React.Component {
             // if current user is the author of a recipe, add it to their own array
             if (self.state.userData === json[i].user){
               console.log("adding a recipe to the myRecipes array. recipe author is: "+json[i].user+" and current user is: "+self.state.userData)
-              myRecipes.push(<Col key={i} xs="6" sm="4"><div style={{ textAlign: "left"}}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={()=>{this.showDesc(json[i], ratingButtons)}} src={json[i].image} id="imgClick" className="img-fluid"></img>{ratingButtons}<br></br></div></Col>)
+              myRecipes.push(<Col key={i} xs="6" sm="4"><div style={{ textAlign: "left"}}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={()=>{this.showDesc(json[i], ratingButtons)}} src={json[i].image} id="imgClick" className="img-fluid" style={{boxShadow: "1px 3px 1px #9E9E9E"}}></img>{ratingButtons}<br></br></div></Col>)
             }
 
-            return <Col key={i} xs="6" sm="4"><div style={{ textAlign: "left"}}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={()=>{this.showDesc(json[i], ratingButtons)}} src={json[i].image} id="imgClick" className="img-fluid"></img>{ratingButtons}<br></br></div></Col>
+            return <Col key={i} xs="6" sm="4"><div style={{ textAlign: "left"}}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={()=>{this.showDesc(json[i], ratingButtons)}} src={json[i].image} id="imgClick" className="img-fluid" style={{boxShadow: "1px 3px 1px #9E9E9E"}}></img>{ratingButtons}<br></br></div></Col>
           })
           allRecipes.push(recipeItem)
         }
@@ -315,9 +315,9 @@ class Home extends React.Component {
   }
   toggleMyRecipes() {
     if (this.state.showMyRecipes) {
-      this.setState({showMyRecipes: false, toggleMyRecipesText: "Show my Recipes"})
+      this.setState({showMyRecipes: false, toggleMyRecipesText: "Show My Recipis"})
     } else {
-      this.setState({showMyRecipes: true, toggleMyRecipesText: "Show all Recipes"})
+      this.setState({showMyRecipes: true, toggleMyRecipesText: "Show All Recipis"})
     }
   }
   //logs user out of current session
