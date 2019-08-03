@@ -4,6 +4,7 @@ import { Container, Row, Col, Form } from 'react-bootstrap';
 import { Button } from "react-bootstrap";
 import RecipeDescription from "./RecipeDescription"
 import PostRecipe from './PostRecipe'
+import Map from "./Map"
 
 
 
@@ -24,13 +25,15 @@ class Home extends React.Component {
       filtRecipes: [],
       myRecipes: [<h3>Nothing to show!</h3>],
       showMyRecipes: false,
-      toggleMyRecipesText: "Show My Recipis"
+      toggleMyRecipesText: "Show My Recipis",
+      showMap: false
     }
     this.goBack = this.goBack.bind(this);
     this.showInput = this.showInput.bind(this);
     this.loadRecipes = this.loadRecipes.bind(this);
     this.plusRating = this.plusRating.bind(this);
     this.toggleMyRecipes = this.toggleMyRecipes.bind(this);
+    this.toggleMap = this.toggleMap.bind(this);
   }
   componentDidMount() {
     //verify token
@@ -149,7 +152,7 @@ class Home extends React.Component {
               }).then((result) => {
                 newRecipe = result[0]
                 let newRecipeArray = [...self.state.recipes]
-                let ratingButtons = <div><p>Already voted!</p> <p>Rating: {newRecipe.rating} </p></div>
+                let ratingButtons = <div><p>Already voted!</p> <p style={{ fontWeight: "bold"}}>Rating: {newRecipe.rating} </p></div>
                 newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={() => { self.showDesc(newRecipe, ratingButtons) }} src={newRecipe.image} id="imgClick" style={{ height: "auto", maxHeight: "275px"}}className="img-fluid shadow p-1 mb-3 rounded" ></img>{ratingButtons}<br></br></div></Col>
                 self.setState({ recipes: newRecipeArray })
 
@@ -218,7 +221,7 @@ class Home extends React.Component {
               }).then((result) => {
                 newRecipe = result[0]
                 let newRecipeArray = [...self.state.recipes]
-                let ratingButtons = <div><p>Already voted!</p> <p>Rating: {newRecipe.rating} </p></div>
+                let ratingButtons = <div><p>Already voted!</p> <p style={{ fontWeight: "bold"}}>Rating: {newRecipe.rating} </p></div>
                 newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p><img onClick={() => { self.showDesc(newRecipe, ratingButtons) }} src={newRecipe.image} id="imgClick" style={{ height: "auto", maxHeight: "275px"}} className="img-fluid shadow p-1 mb-3 rounded" ></img>{ratingButtons}<br></br></div></Col>
                 self.setState({ recipes: newRecipeArray })
 
@@ -282,9 +285,9 @@ class Home extends React.Component {
             .then(goodJson => {
               let ratingButtons = ""
               if (goodJson.success) {
-                ratingButtons = <div><Button style={{ border: "1px solid black" }} variant="light" onClick={() => { this.plusRating(json[i].title, i) }}> + </Button><Button style={{ border: "1px solid black" }} variant="light" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> <p>Rating: {json[i].rating} </p></div>
+                ratingButtons = <div><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.plusRating(json[i].title, i) }}> + </Button><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> <p style={{ fontWeight: "bold"}}>Rating: {json[i].rating} </p></div>
               } else {
-                ratingButtons = <div><p>Already voted!</p> <p>Rating: {json[i].rating} </p></div>
+                ratingButtons = <div><p>Already voted!</p> <p style={{ fontWeight: "bold"}}>Rating: {json[i].rating} </p></div>
               }
               let recipeTitleByIndex = self.state.recipeTitleByIndex
               recipeTitleByIndex[i] = json[i].title
@@ -327,6 +330,13 @@ class Home extends React.Component {
       this.setState({ showMyRecipes: true, toggleMyRecipesText: "Show All Recipis" })
     }
   }
+  toggleMap() {
+    if (this.state.showMap) {
+      this.setState({ showMap: false })
+    } else {
+      this.setState({ showMap: true })
+    }
+  }
   //logs user out of current session
   logout(token) {
     this.setState({ isLoading: true })
@@ -359,23 +369,25 @@ class Home extends React.Component {
         let displayedRecipes = ""
         //if there is currently a non-empty search term string, only display filtered recipes
         if (this.state.searchTerm !== "") {
-          displayedRecipes = this.state.filtRecipes
+          displayedRecipes = <Row>{this.state.filtRecipes}</Row>
         } else {
-          displayedRecipes = this.state.recipes
+          displayedRecipes = <Row>{this.state.recipes}</Row>
         }
         if (this.state.showMyRecipes) {
-          displayedRecipes = this.state.myRecipes
+          displayedRecipes = <Row>{this.state.myRecipes}</Row>
+        }
+        if (this.state.showMap) {
+          displayedRecipes = <div className="text-center" style={{height: "1000px", margin: "0px"}}><Map /></div>
         }
         return (
         <div>
         <Container>
           <h3 className="text-center"> Welcome {this.state.userData}, check out these Recipis!</h3>
-          <Form>
+          <Form onSubmit={(e)=>{e.preventDefault()}}>
             <Form.Group controlId="formSearchTerms">
               <Form.Control
                 value={this.state.searchTerm}
                 onChange={this.handleSearch}
-                onSubmit={(e)=>{e.preventDefault()}}
                 type="search"
                 placeholder="Search Recipi titles ..." />
             </Form.Group>
@@ -384,14 +396,14 @@ class Home extends React.Component {
 
           <div className="text-center">
             <Button className="btn" variant="info" onClick={this.showInput}>Post a Recipi</Button>    <span> </span>
-            <Button className="btn" variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>
+            <Button className="btn" variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>    <span> </span>
+            <Button className="btn" variant="info" onClick={this.toggleMap}>Toggle Map</Button>
           </div>
           <br></br>
-
-          <Row>
+          
             {displayedRecipes}
             <br></br>
-          </Row>
+        
           <div className="text-center">
             <Button className="btn" variant="secondary" onClick={() => { this.logout(this.state.token) }}>Logout</Button>
           </div>
