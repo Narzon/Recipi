@@ -295,7 +295,6 @@ class Home extends React.Component {
 
               // if current user is the author of a recipe, add it to their own array
               if (self.state.userData === json[i].user) {
-                console.log("adding a recipe to the myRecipes array. recipe author is: " + json[i].user + " and current user is: " + self.state.userData)
                 myRecipes.push(<Col key={i} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p><img onClick={() => { this.showDesc(json[i], ratingButtons) }} src={json[i].image} id="imgClick" style={{ height: "auto", maxHeight: "275px"}} className="img-fluid shadow p-1 mb-3 rounded" ></img>{ratingButtons}<br></br></div></Col>)
               }
 
@@ -377,7 +376,7 @@ class Home extends React.Component {
           displayedRecipes = <Row>{this.state.myRecipes}</Row>
         }
         if (this.state.showMap) {
-          displayedRecipes = <div className="text-center" style={{height: "1000px", margin: "0px"}}><Map /></div>
+          return <div className="text-center" style={{height: "1000px", margin: "0px"}}><Button className="btn" style={{margin: "5px"}} variant="info" onClick={this.toggleMap}>Toggle Map</Button><br></br><Map /></div>
         }
         return (
         <div>
