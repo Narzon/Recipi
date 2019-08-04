@@ -80,6 +80,7 @@ class PostRecipe extends React.Component {
                     type="title"
                     value={this.state.title}
                     onChange={this.handleChange}
+                    placeholder="Enter your Recipi title ... "
                     />
                 </FormGroup>
                 <FormGroup controlId="shortDesc" bsSize="large">
@@ -88,6 +89,9 @@ class PostRecipe extends React.Component {
                     value={this.state.shortDesc}
                     onChange={this.handleChange}
                     type="shortDesc"
+                    as="textarea" 
+                    placeholder="Enter a short subtitle for your Recipi"
+                    rows="2"
                     />
                 </FormGroup>
                 <FormGroup controlId="longDesc" bsSize="large">
@@ -96,6 +100,9 @@ class PostRecipe extends React.Component {
                     value={this.state.longDesc}
                     onChange={this.handleChange}
                     type="longDesc"
+                    as="textarea" 
+                    placeholder="Enter your full description or Recipi story here ..."
+                    rows="4"
                     />
                 </FormGroup>
                 <FormGroup controlId="instructions" bsSize="large">
@@ -104,6 +111,9 @@ class PostRecipe extends React.Component {
                     value={this.state.instructions}
                     onChange={this.handleChange}
                     type="instructions"
+                    as="textarea"
+                    placeholder="Enter your instructions ... " 
+                    rows="4"
                     />
                 </FormGroup>
                 <FormGroup controlId="ingredients" bsSize="large">
@@ -112,6 +122,9 @@ class PostRecipe extends React.Component {
                     value={this.state.ingredients}
                     onChange={this.handleChange}
                     type="ingredients"
+                    as="textarea"
+                    placeholder="Separate by commas" 
+                    rows="4"
                     />
                 </FormGroup>
                 <FormGroup controlId="imageURL" bsSize="large">

@@ -147,13 +147,13 @@ class LoginForm extends Component {
     //display Loading ... if appropriate
     if (this.state.isLoading) {
       return (
-        <Container> <div className="text-center"><h2 className="text-center">Loading ... </h2> </div></Container>
+        <Container style={{height: "1000px"}}> <div className="text-center"><h2 className="text-center">Loading ... </h2> </div></Container>
       )
     }
     //if it exists in state, render a registration form instead of login
     if (this.state.registerForm) {
       return (
-        <Container>
+        <Container style={{height: "1000px"}}>
           <div className="Login">
             <form onSubmit={this.handleSubmit}>
               <FormGroup controlId="email" bsSize="large">
@@ -209,7 +209,7 @@ class LoginForm extends Component {
     //if there is no token currently in state, or if there is a token that fails authentication, render the login form
     if (!this.state.token || this.state.validSession === false) {
       return (
-        <Container>
+        <Container style={{height: "1000px"}}>
           <div>
             <p>Login here: </p>
             <form onSubmit={this.handleLogin}>

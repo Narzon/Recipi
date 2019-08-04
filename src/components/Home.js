@@ -285,7 +285,7 @@ class Home extends React.Component {
             .then(goodJson => {
               let ratingButtons = ""
               if (goodJson.success) {
-                ratingButtons = <div><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.plusRating(json[i].title, i) }}> + </Button><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> <p style={{ fontWeight: "bold"}}>Rating: {json[i].rating} </p></div>
+                ratingButtons = <div><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.plusRating(json[i].title, i) }}>	+ </Button><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> <p style={{ fontWeight: "bold"}}>Rating: {json[i].rating} </p></div>
               } else {
                 ratingButtons = <div><p>Already voted!</p> <p style={{ fontWeight: "bold"}}>Rating: {json[i].rating} </p></div>
               }
@@ -319,7 +319,7 @@ class Home extends React.Component {
     for (let i = 0; i < recipe.ingredients.length; i++) {
       arrayOfElements.push(<div>{`\u2022`} {recipe.ingredients[i]}<br></br></div>)
     }
-    let newComponent = <RecipeDescription ratingButtons={ratingButtons} title={this.capitalize_Words(recipe.title)} user={recipe.user} imgSrc={recipe.image} elements={arrayOfElements} longDesc={recipe.longDescription} instructions={recipe.instructions} goBack={() => { self.setState({ recipeDescription: "" }) }} />
+    let newComponent = <RecipeDescription token={this.state.token} currentUser={this.state.userData} ratingButtons={ratingButtons} title={this.capitalize_Words(recipe.title)} user={recipe.user} imgSrc={recipe.image} elements={arrayOfElements} longDesc={recipe.longDescription} instructions={recipe.instructions} goBack={() => { self.setState({ recipeDescription: "" }) }} />
     this.setState({ recipeDescription: newComponent })
   }
   toggleMyRecipes() {
@@ -347,7 +347,7 @@ class Home extends React.Component {
   render() {
     //if content is loading, display Loading ... screen
     if (this.state.isLoading) {
-      return <Container> <div className="text-center"><h2 className="text-center">Loading ... </h2> </div></Container>
+      return <Container style={{height: "1000px"}}> <div className="text-center"><h2 className="text-center">Loading ... </h2> </div></Container>
     }
     //if a description exists in state, display that component
     if (this.state.recipeDescription) {
@@ -360,6 +360,9 @@ class Home extends React.Component {
     //if input form exists in state, display that component
     if (this.state.inputRecipe) {
       return this.state.inputRecipe
+    }
+    if (this.state.showMap) {
+      return <div className="text-center" style={{height: "1000px", margin: "0px"}}><Button className="btn" style={{margin: "5px"}} variant="info" onClick={this.toggleMap}>Toggle Map</Button><br></br><Map /></div>
     }
     //check for token
     if (this.state.token) {
@@ -375,9 +378,7 @@ class Home extends React.Component {
         if (this.state.showMyRecipes) {
           displayedRecipes = <Row>{this.state.myRecipes}</Row>
         }
-        if (this.state.showMap) {
-          return <div className="text-center" style={{height: "1000px", margin: "0px"}}><Button className="btn" style={{margin: "5px"}} variant="info" onClick={this.toggleMap}>Toggle Map</Button><br></br><Map /></div>
-        }
+        
         return (
         <div>
         <Container>
@@ -394,9 +395,9 @@ class Home extends React.Component {
           <br></br>
 
           <div className="text-center">
-            <Button className="btn" variant="info" onClick={this.showInput}>Post a Recipi</Button>    <span> </span>
-            <Button className="btn" variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>    <span> </span>
-            <Button className="btn" variant="info" onClick={this.toggleMap}>Toggle Map</Button>
+            <Button className="btn" style={{margin: "3px"}} variant="info" onClick={this.showInput}>Post a Recipi</Button>    <span> </span>
+            <Button className="btn" style={{margin: "3px"}} variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>    <span> </span>
+            <Button className="btn" style={{margin: "3px"}} variant="info" onClick={this.toggleMap}>Toggle Map</Button>
           </div>
           <br></br>
           

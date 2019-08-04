@@ -7,6 +7,7 @@ const userRoutes = require("./routes/UserRoutes");
 const sessionRoutes = require("./routes/SessionRoutes");
 const recipeRoutes = require("./routes/RecipeRoutes")
 const userVotedRoutes = require("./routes/UserVotedRoutes")
+const commentRoutes = require("./routes/CommentRoutes")
 
 
 
@@ -33,8 +34,9 @@ function startServer() {
   app.use(bodyParser.json());
   app.use(userRoutes);
   app.use(sessionRoutes);
-  app.use(recipeRoutes)
-  app.use(userVotedRoutes)
+  app.use(recipeRoutes);
+  app.use(userVotedRoutes);
+  app.use(commentRoutes);
 
   app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/index.html'));
