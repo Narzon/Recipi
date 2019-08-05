@@ -78,8 +78,8 @@ class RecipeDescription extends React.Component {
                 <Button variant="info" onClick={this.props.goBack}>Go Back</Button>
                 <h1>{this.state.title}</h1> <p>by {this.state.user}</p> 
                 <img className="img-fluid shadow-lg p-2 mb-3 rounded" style={{"maxHeight": 550}} src={this.props.imgSrc}></img>
-                {this.state.ratingButtons} <p>{this.props.longDesc}</p> <br></br>
-                {this.props.elements}<p style={{border: "2px solid #6EC2F0", margin: "2px", padding: "10px", borderRadius: "10px"}}>{this.props.instructions}</p>
+                {this.state.ratingButtons} <p style={{margin: "2px", padding: "5px"}} >{this.props.longDesc}</p> 
+                <div style={{border: "2px solid #6EC2F0", margin: "2px", padding: "5px", borderRadius: "5px"}}><br></br>{this.props.elements}<br></br><p>{this.props.instructions}</p></div>
                 <br></br>
                 <h3>Leave a comment below!</h3>
                 <Form
