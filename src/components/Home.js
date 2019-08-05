@@ -34,6 +34,7 @@ class Home extends React.Component {
     this.plusRating = this.plusRating.bind(this);
     this.toggleMyRecipes = this.toggleMyRecipes.bind(this);
     this.toggleMap = this.toggleMap.bind(this);
+    this.loadRandomRecipe = this.loadRandomRecipe.bind(this);
   }
   componentDidMount() {
     //verify token
@@ -159,7 +160,12 @@ class Home extends React.Component {
                 //if page is currently displayed a recipe description, refresh the component to display new rating properly
                 if (self.state.recipeDescription) {
                   self.setState({ recipeDescription: "" })
-                  self.showDesc(newRecipe, ratingButtons)
+                  //send the detailed description page a special goBack function, to fully reload page recipes (avoids duplicate recipe error)
+                  let refreshPage = () => {
+                    this.loadRecipes()
+                    this.setState({ recipeDescription: "" })
+                  }
+                  this.showDesc(newRecipe, ratingButtons, refreshPage)
                 }
                 //if there is currently a search term filtering results, refresh the filtering to display new rating properly
                 if (self.state.searchTerm) {
@@ -228,7 +234,12 @@ class Home extends React.Component {
                 //if page is currently displayed a recipe description, refresh the component to display new rating properly
                 if (self.state.recipeDescription) {
                   self.setState({ recipeDescription: "" })
-                  self.showDesc(newRecipe, ratingButtons)
+                  //send the detailed description page a special goBack function, to fully reload page recipes (avoids duplicate recipe error)
+                  let refreshPage = () => {
+                    this.loadRecipes()
+                    this.setState({ recipeDescription: "" })
+                  }
+                  this.showDesc(newRecipe, ratingButtons, refreshPage)
                 }
                 //if there is currently a search term filtering results, refresh the filtering to display new rating properly
                 if (self.state.searchTerm) {
@@ -248,6 +259,41 @@ class Home extends React.Component {
         }
       });
 
+  }
+  //load a random recipe from the server
+  loadRandomRecipe() {
+    let i = Math.floor(Math.random()*this.state.recipes.length)
+    fetch('/api/recipes', {
+      method: 'GET',
+      headers: {
+        'token': this.state.token
+      },
+    })
+      .then(res => res.json())
+      .then(json => {
+        fetch('/api/user/didvote', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            user: this.state.userData,
+            recipeTitle: json[i].title,
+            dontChange: true,
+            token: this.state.token
+          }),
+        }).then(res => res.json())
+          .then(goodJson => {
+            let ratingButtons = ""
+            if (goodJson.success) {
+              ratingButtons = <div><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.plusRating(json[i].title, i) }}>	+ </Button><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> <p style={{ fontWeight: "bold"}}>Rating: {json[i].rating} </p></div>
+            } else {
+              ratingButtons = <div><p>Already voted!</p> <p style={{ fontWeight: "bold"}}>Rating: {json[i].rating} </p></div>
+            }
+            this.showDesc(json[i], ratingButtons)
+          })
+      })
+    
   }
   //method fetches all recipes from database, sorts by rating in descending order, and format them for display
   loadRecipes() {
@@ -313,14 +359,20 @@ class Home extends React.Component {
 
   }
   //method shows a detailed description of recipe upon clicking
-  showDesc(recipe, ratingButtons) {
+  showDesc(recipe, ratingButtons, altGoBack) {
     let self = this
     let arrayOfElements = []
     for (let i = 0; i < recipe.ingredients.length; i++) {
       arrayOfElements.push(<div>{`\u2022`} {recipe.ingredients[i]}<br></br></div>)
     }
-    let newComponent = <RecipeDescription token={this.state.token} currentUser={this.state.userData} ratingButtons={ratingButtons} title={this.capitalize_Words(recipe.title)} user={recipe.user} imgSrc={recipe.image} elements={arrayOfElements} longDesc={recipe.longDescription} instructions={recipe.instructions} goBack={() => { self.setState({ recipeDescription: "" }) }} />
+    let goBack = () => { self.setState({ recipeDescription: "" }) }
+    // if given, pass on a different goBack method for the description page
+    if (altGoBack) {
+      goBack = altGoBack
+    }
+    let newComponent = <RecipeDescription token={this.state.token} currentUser={this.state.userData} ratingButtons={ratingButtons} title={this.capitalize_Words(recipe.title)} user={recipe.user} imgSrc={recipe.image} elements={arrayOfElements} longDesc={recipe.longDescription} instructions={recipe.instructions} goBack={goBack} />
     this.setState({ recipeDescription: newComponent })
+    window.scrollTo(0, 0)
   }
   toggleMyRecipes() {
     if (this.state.showMyRecipes) {
@@ -347,7 +399,7 @@ class Home extends React.Component {
   render() {
     //if content is loading, display Loading ... screen
     if (this.state.isLoading) {
-      return <Container style={{height: "1000px"}}> <div className="text-center"><h2 className="text-center">Loading ... </h2> </div></Container>
+      return <Container style={{height: "900px"}}> <div className="text-center"><h2 className="text-center">Loading ... </h2> </div></Container>
     }
     //if a description exists in state, display that component
     if (this.state.recipeDescription) {
@@ -362,7 +414,7 @@ class Home extends React.Component {
       return this.state.inputRecipe
     }
     if (this.state.showMap) {
-      return <div className="text-center" style={{height: "1000px", margin: "0px"}}><Button className="btn" style={{margin: "5px"}} variant="info" onClick={this.toggleMap}>Toggle Map</Button><br></br><Map /></div>
+      return <div className="text-center" style={{height: "900px", margin: "0px"}}><Button className="btn" style={{margin: "5px"}} variant="info" onClick={this.toggleMap}>Toggle Map</Button><br></br><Map token={this.state.token} /></div>
     }
     //check for token
     if (this.state.token) {
@@ -398,6 +450,7 @@ class Home extends React.Component {
             <Button className="btn" style={{margin: "3px"}} variant="info" onClick={this.showInput}>Post a Recipi</Button>    <span> </span>
             <Button className="btn" style={{margin: "3px"}} variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>    <span> </span>
             <Button className="btn" style={{margin: "3px"}} variant="info" onClick={this.toggleMap}>Toggle Map</Button>
+            <Button className="btn" style={{margin: "3px"}} variant="info" onClick={this.loadRandomRecipe}>Choose For Me</Button>
           </div>
           <br></br>
           

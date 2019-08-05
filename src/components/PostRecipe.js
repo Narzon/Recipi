@@ -10,7 +10,9 @@ class PostRecipe extends React.Component {
             longDesc: "",
             ingredients: [],
             instructions: "",
-            imageURL: ""
+            imageURL: "",
+            restaurant: "",
+            city: ""
         }
     }
     componentDidMount() {
@@ -27,7 +29,9 @@ class PostRecipe extends React.Component {
             longDesc,
             ingredients,
             instructions,
-            imageURL
+            imageURL,
+            restaurant,
+            city
         } = this.state;
         let ingredientsArray = ingredients.replace(/\s*,\s*/g, ",").split(',')
         ingredientsArray = ingredientsArray.map((item)=>{
@@ -60,6 +64,28 @@ class PostRecipe extends React.Component {
                 alert("Failed! Server error.")
             }
         });
+
+        //attempt to post marker for google map
+        fetch('/api/markers', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: this.props.token,
+                recipe: title,
+                restaurant: restaurant,
+                city: city
+            }),
+        }).then(res => res.json())
+            .then(json => {
+            //upon successful posting, go back
+            if (json.success) {
+                console.log("marker saved successfully")
+            } 
+        });
+
+
 
     }
 
@@ -133,6 +159,22 @@ class PostRecipe extends React.Component {
                     value={this.state.imageURL}
                     onChange={this.handleChange}
                     type="imageURL"
+                    />
+                </FormGroup>
+                <FormGroup controlId="restaurant" bsSize="large">
+                    <FormLabel>(Optional) Restaurant  </FormLabel>
+                    <FormControl
+                    value={this.state.restaurant}
+                    onChange={this.handleChange}
+                    type="restaurant"
+                    />
+                </FormGroup>
+                <FormGroup controlId="city" bsSize="large">
+                    <FormLabel>(Optional) City  </FormLabel>
+                    <FormControl
+                    value={this.state.city}
+                    onChange={this.handleChange}
+                    type="city"
                     />
                 </FormGroup>
                 <Button

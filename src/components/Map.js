@@ -10,16 +10,18 @@ export class MapContainer extends Component {
     constructor(props) {
         super(props)
         this.state={
-            token: "",
+            token: this.props.token,
             isLoading: true,
             showingInfoWindow: false,
             activeMarker: {},
             selectedPlace: {},
-            userLocation: { lat: 30.26, lng: -97.74}
+            userLocation: { lat: 30.26, lng: -97.74},
+            recipiMarkers: [],
+            displayMarkers: []
         }
     }
     componentDidMount() {
-        navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.getCurrentPosition(
             position => {
               const { latitude, longitude } = position.coords;
       
@@ -34,6 +36,33 @@ export class MapContainer extends Component {
               this.setState({ isLoading: false });
             }
           );
+
+      fetch('/api/markers', {
+        method: 'GET',
+        headers: {
+          'token': this.state.token
+        },
+      })
+        .then(res => res.json())
+        .then(markers => {
+            let recipiMarkers = this.state.recipiMarkers
+            for (let i = 0; i < markers.length; i++) {
+              //let newMarker = {
+               // restaurant: markers[i].restaurant,
+               // recipe: markers[i].recipe,
+               // location: markers[i].location
+              //}
+              let newMarker = <Marker
+              position={markers[i].location}
+              onClick={this.onMarkerClick}
+              name={markers[i].restaurant+" - "+markers[i].recipe}
+              />
+              recipiMarkers.push(newMarker)
+            }
+            this.setState({recipiMarkers: recipiMarkers})
+            console.log("here is your markers state array: ")
+            console.dir(this.state.recipiMarkers)
+        })
     }
     onMarkerClick = (props, marker, e) =>
     this.setState({
@@ -60,31 +89,7 @@ export class MapContainer extends Component {
               style={mapStyles}
               initialCenter={this.state.userLocation}
             >
-              <Marker
-                position={{ lat: 30.254659, lng: -97.762101}}
-                onClick={this.onMarkerClick}
-                name={"Odd Duck"}
-              />
-              <Marker
-                position={{ lat: 30.249659, lng: -97.749984}}
-                onClick={this.onMarkerClick}
-                name={"Hopdoddy"}
-              />
-              <Marker
-                position={{ lat: 30.245221, lng: -97.779389}}
-                onClick={this.onMarkerClick}
-                name={"Matt's El Rancho"}
-              />
-              <Marker
-                position={{ lat: 30.249199, lng: -97.749589}}
-                onClick={this.onMarkerClick}
-                name={"Home Slice"}
-              />
-              <Marker
-                position={{ lat: 30.266742, lng: -97.744948}}
-                onClick={this.onMarkerClick}
-                name={"Truluck's"}
-              />
+              {this.state.recipiMarkers}
               <InfoWindow
                 marker={this.state.activeMarker}
                 visible={this.state.showingInfoWindow}
