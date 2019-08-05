@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 
 const mapStyles = {
@@ -47,29 +48,31 @@ export class MapContainer extends Component {
         .then(markers => {
             let recipiMarkers = this.state.recipiMarkers
             for (let i = 0; i < markers.length; i++) {
-              //let newMarker = {
-               // restaurant: markers[i].restaurant,
-               // recipe: markers[i].recipe,
-               // location: markers[i].location
-              //}
+              console.dir(markers[i])
+
               let newMarker = <Marker
-              position={markers[i].location}
-              onClick={this.onMarkerClick}
-              name={markers[i].restaurant+" - "+markers[i].recipe}
+                position={markers[i].location}
+                onClick={this.onMarkerClick}
+                title={this.capitalize_Words(markers[i].restaurant)}
+                name={this.capitalize_Words(markers[i].recipe)}
+                key={i}
               />
               recipiMarkers.push(newMarker)
             }
             this.setState({recipiMarkers: recipiMarkers})
-            console.log("here is your markers state array: ")
-            console.dir(this.state.recipiMarkers)
+
         })
     }
-    onMarkerClick = (props, marker, e) =>
-    this.setState({
+    capitalize_Words(str) {
+      return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+    }
+    onMarkerClick = (props, marker, e) => {
+      console.dir(marker)
+      this.setState({
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true
-    });
+    });}
     onClose = props => {
         if (this.state.showingInfoWindow) {
           this.setState({
@@ -77,7 +80,13 @@ export class MapContainer extends Component {
             activeMarker: null
           });
         }
-      };
+    };
+    //because event handlers in dynamic infowindow content cannot work properly, render React content to element within InfoWindow by id
+    onInfoWindowOpen(props, e) {
+      const content = (<div><h3><span onClick={()=>{this.props.loadRecipeFromMap(this.state.selectedPlace.name)}} style={{cursor: "pointer"}}>{this.state.selectedPlace.name} from {this.state.selectedPlace.title}</span></h3>
+      <p>Click the dish to be taken to its Recipi!</p></div>)
+      ReactDOM.render(React.Children.only(content), document.getElementById("currentInfo"))
+    }
     render() {
         if (this.state.isLoading) {
             return <div>Loading ... </div>
@@ -94,9 +103,11 @@ export class MapContainer extends Component {
                 marker={this.state.activeMarker}
                 visible={this.state.showingInfoWindow}
                 onClose={this.onClose}
+                onOpen={e => {
+                  this.onInfoWindowOpen(this.props, e);
+                }}
               >
-                <div>
-                  <h4>{this.state.selectedPlace.name}</h4>
+                <div id="currentInfo">
                 </div>
               </InfoWindow>
             </Map>
