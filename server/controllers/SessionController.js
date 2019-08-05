@@ -48,7 +48,7 @@ function signin(req, res, next) {
       });
     }
     // Otherwise correct user, provide token with 1 hour expiration
-    let token = jwt.sign({ userEmail: email, userName: user.username }, process.env.secretKey, { expiresIn: '1h' })
+    let token = jwt.sign({ userEmail: email, userName: user.username }, process.env.secretKey, { expiresIn: '1d' })
 
    return res.send({
      success: true,
