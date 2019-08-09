@@ -35,8 +35,11 @@ class PostRecipe extends React.Component {
         } = this.state;
         let ingredientsArray = ingredients.replace(/\s*,\s*/g, ",").split(',')
         ingredientsArray = ingredientsArray.map((item)=>{
-            let newItem= ""+item[0].toUpperCase()+item.slice(1)
-            return newItem
+            if (item[0]) {
+                let newItem= ""+item[0].toUpperCase()+item.slice(1)
+                return newItem
+            }
+            return "Unspecified"
         })
         fetch('/api/recipes', {
             method: 'POST',
@@ -116,7 +119,7 @@ class PostRecipe extends React.Component {
                     onChange={this.handleChange}
                     type="shortDesc"
                     as="textarea" 
-                    placeholder="Enter a short subtitle for your Recipi"
+                    placeholder="Enter a short subtitle for your Recipi ... "
                     rows="2"
                     />
                 </FormGroup>
@@ -149,7 +152,7 @@ class PostRecipe extends React.Component {
                     onChange={this.handleChange}
                     type="ingredients"
                     as="textarea"
-                    placeholder="Separate by commas" 
+                    placeholder="Separate by commas ..." 
                     rows="4"
                     />
                 </FormGroup>

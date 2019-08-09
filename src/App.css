@@ -55,3 +55,26 @@ footer {
   border-color: #325470 !important;
 
 }
+
+.recImg {
+  height: 225px !important;
+}
+
+@media (max-width: 1200px) {
+  .recImg {
+    height: 175px !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .recImg {
+    height: 150px !important;
+  }
+}
+
+@media (max-width: 770px) {
+  .recImg {
+    max-height: 225px !important;
+    height: auto !important;
+  }
+}

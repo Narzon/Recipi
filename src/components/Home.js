@@ -154,8 +154,8 @@ class Home extends React.Component {
               }).then((result) => {
                 newRecipe = result[0]
                 let newRecipeArray = [...self.state.recipes]
-                let ratingButtons = <div><p>Already voted! - <span style={{ fontWeight: "bold" }}>Rating: {newRecipe.rating} </span></p></div>
-                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <img onClick={() => { self.showDesc(newRecipe, ratingButtons) }} src={newRecipe.image} id="imgClick" style={{ height: "auto", maxHeight: "275px" }} className="img-fluid shadow p-1 mb-3 rounded" ></img><p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p>{ratingButtons}<br></br></div></Col>
+                let ratingButtons = <div><p style={{paddingTop: "8px"}}>Already voted! - <span style={{ fontWeight: "bold" }}>Rating: {newRecipe.rating} </span></p></div>
+                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <img onClick={() => { self.showDesc(newRecipe, ratingButtons) }} src={newRecipe.image} id="imgClick" className="img-fluid shadow p-1 mb-3 rounded recImg" ></img><p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p>{ratingButtons}<br></br></div></Col>
                 self.setState({ recipes: newRecipeArray })
 
                 //if page is currently displayed a recipe description, refresh the component to display new rating properly
@@ -228,8 +228,8 @@ class Home extends React.Component {
               }).then((result) => {
                 newRecipe = result[0]
                 let newRecipeArray = [...self.state.recipes]
-                let ratingButtons = <div><p>Already voted! - <span style={{ fontWeight: "bold" }}>Rating: {newRecipe.rating} </span></p></div>
-                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <img onClick={() => { self.showDesc(newRecipe, ratingButtons) }} src={newRecipe.image} id="imgClick" style={{ height: "auto", maxHeight: "275px" }} className="img-fluid shadow p-1 mb-3 rounded" ></img><p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p>{ratingButtons}<br></br></div></Col>
+                let ratingButtons = <div><p style={{paddingTop: "8px"}}>Already voted! - <span style={{ fontWeight: "bold" }}>Rating: {newRecipe.rating} </span></p></div>
+                newRecipeArray[index] = <Col key={index} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <img onClick={() => { self.showDesc(newRecipe, ratingButtons) }} src={newRecipe.image} id="imgClick" className="img-fluid shadow p-1 mb-3 rounded recImg" ></img><p><span style={{ fontWeight: "bold" }}>{self.capitalize_Words(newRecipe.title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {newRecipe.user} </span><br></br> {self.jsUcfirst(newRecipe.description)}</p>{ratingButtons}<br></br></div></Col>
                 self.setState({ recipes: newRecipeArray })
 
                 //if page is currently displayed a recipe description, refresh the component to display new rating properly
@@ -290,7 +290,7 @@ class Home extends React.Component {
             if (goodJson.success) {
               ratingButtons = <div><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.plusRating(json[i].title, i) }}>	+ </Button><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> <p style={{ fontWeight: "bold" }}>Rating: {json[i].rating} </p></div>
             } else {
-              ratingButtons = <div><p>Already voted!</p> <p style={{ fontWeight: "bold" }}>Rating: {json[i].rating} </p></div>
+              ratingButtons = <div><p style={{paddingTop: "8px"}}>Already voted!</p> <p style={{ fontWeight: "bold" }}>Rating: {json[i].rating} </p></div>
             }
             this.showDesc(json[i], ratingButtons)
             this.setState({ isLoading: false })
@@ -336,9 +336,9 @@ class Home extends React.Component {
               return
             }
             if (goodJson.success) {
-              ratingButtons = <div><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.plusRating(json[0].title, 0) }}>	+ </Button><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.minusRating(json[0].title, 0) }}> - </Button> <p style={{ fontWeight: "bold" }}>Rating: {json[0].rating} </p></div>
+              ratingButtons = <div ><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.plusRating(json[0].title, 0) }}>	+ </Button><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.minusRating(json[0].title, 0) }}> - </Button> <p style={{ fontWeight: "bold" }}>Rating: {json[0].rating} </p></div>
             } else {
-              ratingButtons = <div><p>Already voted!</p> <p style={{ fontWeight: "bold" }}>Rating: {json[0].rating} </p></div>
+              ratingButtons = <div><p style={{paddingTop: "8px"}}>Already voted!</p> <p style={{ fontWeight: "bold" }}>Rating: {json[0].rating} </p></div>
             }
             this.showDesc(json[0], ratingButtons)
             this.setState({ isLoading: false })
@@ -384,7 +384,7 @@ class Home extends React.Component {
               if (goodJson.success) {
                 ratingButtons = <div><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.plusRating(json[i].title, i) }}>	+ </Button><Button style={{ border: "1px solid black", width: "45px", height: "45px", fontWeight: "bold", fontSize: "20px" }} variant="info" onClick={() => { this.minusRating(json[i].title, i) }}> - </Button> -<span style={{ fontWeight: "bold" }}> Rating: {json[i].rating} </span></div>
               } else {
-                ratingButtons = <div><p>Already voted! - <span style={{ fontWeight: "bold" }}>Rating: {json[i].rating} </span></p></div>
+                ratingButtons = <div><p style={{paddingTop: "8px"}}>Already voted! - <span style={{ fontWeight: "bold" }}>Rating: {json[i].rating} </span></p></div>
               }
               let recipeTitleByIndex = self.state.recipeTitleByIndex
               recipeTitleByIndex[i] = json[i].title
@@ -392,10 +392,10 @@ class Home extends React.Component {
 
               // if current user is the author of a recipe, add it to their own array
               if (self.state.userData === json[i].user) {
-                myRecipes.push(<Col key={i} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <img onClick={() => { this.showDesc(json[i], ratingButtons) }} src={json[i].image} id="imgClick" style={{ height: "auto", maxHeight: "275px" }} className="img-fluid shadow p-1 mb-3 rounded" ></img><p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p>{ratingButtons}<br></br></div></Col>)
+                myRecipes.push(<Col key={i} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <img onClick={() => { this.showDesc(json[i], ratingButtons) }} src={json[i].image} id="imgClick" className="img-fluid shadow p-1 mb-3 rounded recImg" ></img><p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p>{ratingButtons}<br></br></div></Col>)
               }
 
-              return <Col key={i} xs="6" sm="4"><div style={{ textAlign: "left" }}>    <img onClick={() => { this.showDesc(json[i], ratingButtons) }} src={json[i].image} id="imgClick" style={{ height: "auto", maxHeight: "275px" }} className="img-fluid shadow p-1 mb-3 rounded" ></img><p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p>{ratingButtons}<br></br></div></Col>
+              return <Col key={i} xs="6" sm="4" ><div style={{ textAlign: "left", maxWidth: "100%" }}>    <img onClick={() => { this.showDesc(json[i], ratingButtons) }} src={json[i].image} id="imgClick" className="img-fluid shadow p-1 mb-3 rounded recImg" ></img><p><span style={{ fontWeight: "bold" }}>{this.capitalize_Words(json[i].title)}</span> <br></br><span style={{ fontStyle: "italic" }}>By {json[i].user} </span><br></br> {this.jsUcfirst(json[i].description)}</p>{ratingButtons}<br></br></div></Col>
             })
           allRecipes.push(recipeItem)
         }
@@ -498,8 +498,8 @@ class Home extends React.Component {
               <br></br>
 
               <div className="text-center">
-                <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.showInput}>Post a Recipi</Button>    <span> </span>
-                <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>    <span> </span>
+                <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.showInput}>Post a Recipi</Button>
+                <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>
                 <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.toggleMap}>Toggle Map</Button>
                 <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.loadRandomRecipe}>Choose For Me</Button>
               </div>
