@@ -84,7 +84,7 @@ export class MapContainer extends Component {
   };
   //because event handlers in dynamic infowindow content cannot work properly, render React content to element within InfoWindow by id
   onInfoWindowOpen(props, e) {
-    const content = (<div><h3><span onClick={() => { this.props.loadRecipeFromMap(this.state.selectedPlace.name) }} style={{ cursor: "pointer" }}>{this.state.selectedPlace.name} from {this.state.selectedPlace.title}</span></h3>
+    const content = (<div><h3><span onClick={() => { this.props.loadRecipeFromMap(this.state.selectedPlace.name, this.props.oldSelf) }} style={{ cursor: "pointer" }}>{this.state.selectedPlace.name} from {this.state.selectedPlace.title}</span></h3>
       <p>Click the dish to be taken to its Recipi!</p></div>)
     ReactDOM.render(React.Children.only(content), document.getElementById("currentInfo"))
   }

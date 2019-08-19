@@ -11,7 +11,6 @@ class RecipeDescription extends React.Component {
             commentText: "",
             token: this.props.token,
             comments: []
-
         }
     }
     componentDidMount = () => {
@@ -19,33 +18,28 @@ class RecipeDescription extends React.Component {
 
     }
     handleChange = (e) => {
-        this.setState({commentText: e.target.value})
+        this.setState({ commentText: e.target.value })
     }
     loadComments = () => {
         return fetch('/api/comments', {
             method: 'GET',
             headers: {
-              'token': this.state.token,
-              'recipe': this.state.title
+                'token': this.state.token,
+                'recipe': this.state.title
             },
-          })
+        })
             .then(res => res.json())
             .then(json => {
-                let newComments = json.map((comment, index)=>{
-                    return <div key={index} style={{border: "1px solid #6EC2F0", margin: "2px", padding: "10px", borderRadius: "10px"}}><p><span style={{ fontWeight: "bold"}}>{comment.user}</span> - <span opacity={0.5}>{comment.date}</span></p><p>{comment.comment}</p></div>
+                let newComments = json.map((comment, index) => {
+                    return <div key={index} style={{ border: "1px solid #6EC2F0", margin: "2px", padding: "10px", borderRadius: "10px" }}><p><span style={{ fontWeight: "bold" }}>{comment.user}</span> - <span opacity={0.5}>{comment.date}</span></p><p>{comment.comment}</p></div>
                 })
-                this.setState({comments: newComments.reverse()})
-
-
-
-
-
+                this.setState({ comments: newComments.reverse() })
             })
 
     }
     handleCommentSubmit = (e) => {
         e.preventDefault()
-        this.setState({commentText: ""})
+        this.setState({ commentText: "" })
         if (!this.state.commentText) {
             alert("Comment cannot be blank!")
             return "error"
@@ -59,7 +53,7 @@ class RecipeDescription extends React.Component {
         fetch('/api/comments', {
             method: 'POST',
             headers: {
-            'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 recipe: title,
@@ -69,42 +63,42 @@ class RecipeDescription extends React.Component {
             }),
         }).then(res => res.json())
             .then(json => {
-        }).then(()=>{this.loadComments()});
+            }).then(() => { this.loadComments() });
 
     }
     render() {
         return <Container>
-                <br></br>
-                <Button variant="info" onClick={this.props.goBack}>Go Back</Button>
-                <h1>{this.state.title}</h1> <p>by {this.state.user}</p> 
-                <img className="img-fluid shadow-lg p-2 mb-3 rounded" style={{"maxHeight": 550}} src={this.props.imgSrc}></img>
-                {this.state.ratingButtons} <p style={{margin: "2px", padding: "5px"}} >{this.props.longDesc}</p> 
-                <div style={{border: "2px solid #6EC2F0", margin: "2px", padding: "5px", borderRadius: "5px", backgroundColor: "#f5fcff"}}><br></br>{this.props.elements}<br></br><p>{this.props.instructions}</p></div>
-                <br></br>
-                <h3>Leave a comment below!</h3>
-                <Form
+            <br></br>
+            <Button variant="info" onClick={this.props.goBack}>Go Back</Button>
+            <h1>{this.state.title}</h1> <p>by {this.state.user}</p>
+            <img className="img-fluid shadow-lg p-2 mb-3 rounded" style={{ "maxHeight": 550 }} src={this.props.imgSrc}></img>
+            {this.state.ratingButtons} <p style={{ margin: "2px", padding: "5px" }} >{this.props.longDesc}</p>
+            <div style={{ border: "2px solid #6EC2F0", margin: "2px", padding: "5px", borderRadius: "5px", backgroundColor: "#f5fcff" }}><br></br>{this.props.elements}<br></br><p>{this.props.instructions}</p></div>
+            <br></br>
+            <h3>Leave a comment below!</h3>
+            <Form
                 onSubmit={this.handleCommentSubmit}>
-                    <Form.Group controlId="commentInput">
-                        <Form.Control 
-                        as="textarea" 
+                <Form.Group controlId="commentInput">
+                    <Form.Control
+                        as="textarea"
                         rows="3"
                         placeholder="Enter comment ..."
                         value={this.state.commentText}
                         onChange={this.handleChange} />
-                    </Form.Group>
-                    <Button
-                        block
-                        type="submit"
-                        variant="info"
-                    >
-                        Submit!
+                </Form.Group>
+                <Button
+                    block
+                    type="submit"
+                    variant="info"
+                >
+                    Submit!
                     </Button>
-                </Form>
-                <br></br>
-                {this.state.comments}
-              
-              
-            </Container>
+            </Form>
+            <br></br>
+            {this.state.comments}
+
+
+        </Container>
     }
 }
 
