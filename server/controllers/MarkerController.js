@@ -4,19 +4,6 @@ var jwt = require('jsonwebtoken');
 const fetch = require("node-fetch");
 
 function showAll(req, res, next) {
-  if (req.headers) {
-    var token = req.headers.token
-  } else {
-    return res.send({ success: false, message: 'Error: Server error' })
-  }
-  try {
-    let userData = jwt.verify(token, process.env.secretKey)
-  } catch (err) {
-    return res.send({
-      success: false,
-      message: "Bad, verification failed"
-    })
-  }
     Marker.find({ 
         }, (err, result) => {
         if (err) {

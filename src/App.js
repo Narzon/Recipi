@@ -55,7 +55,7 @@ class App extends Component {
           </header>
           <body style={{ backgroundColor: "#e6f5fc", color: "#1c7fad", fontFamily: "Quicksand" }}>
             <Route exact path="/" render={() => (
-              <Redirect to="/login"/>
+              <Redirect to="/home"/>
             )} />
             <Route exact path="/login" render={(routeProps) => (
               <LoginForm {...routeProps} token={this.state.token} saveToken={this.saveToken} />

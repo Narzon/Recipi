@@ -28,8 +28,10 @@ class Home extends React.Component {
       myRecipes: [<h3>Nothing to show!</h3>],
       showMyRecipes: false,
       toggleMyRecipesText: "Show My Recipis",
-      showMap: false
+      showMap: false,
+      redirectLogin: false
     }
+    this.goLogin = this.goLogin.bind(this)
     this.goBack = this.goBack.bind(this);
     this.showInput = this.showInput.bind(this);
     this.changeRating = ChangeRating.bind(this);
@@ -60,10 +62,13 @@ class Home extends React.Component {
           });
           this.loadRecipes(this)
         } else {
+          //if token is not present or invalid, load user as Guest
           this.setState({
             isLoggedIn: false,
+            userData: "Guest",
             isLoading: false
           });
+          this.loadRecipes(this)
         }
       });
 
@@ -111,6 +116,7 @@ class Home extends React.Component {
     }
     this.setState({ inputRecipe: "" })
   }
+  //allows user to toggle only their submitted recipes
   toggleMyRecipes() {
     if (this.state.showMyRecipes) {
       this.setState({ showMyRecipes: false, toggleMyRecipesText: "Show My Recipis" })
@@ -118,6 +124,7 @@ class Home extends React.Component {
       this.setState({ showMyRecipes: true, toggleMyRecipesText: "Show All Recipis" })
     }
   }
+  //toggles Google Map feature on or off
   toggleMap() {
     if (this.state.showMap) {
       this.setState({ showMap: false })
@@ -137,6 +144,10 @@ class Home extends React.Component {
     this.setState({ logout: true, isLoggedIn: false, isLoading: false })
 
   }
+  //relocate user to login/registration page
+  goLogin() {
+    this.setState({ redirectLogin: true})
+  }
   
   render() {
     //if content is loading, display Loading ... screen
@@ -151,26 +162,73 @@ class Home extends React.Component {
     if (this.state.logout) {
       return <Redirect to='/' />
     }
+    //if users clicks login/registration, redirect them appropriately
+    if (this.state.redirectLogin) {
+      return <Redirect to='/login' />
+    }
     //if inputform is true in state, display that component
     if (this.state.inputRecipe) {
       return <Container><div className="row align-items-center justify-content-center"><PostRecipe user={this.state.userData} token={this.state.token} goBack={this.goBack} /></div></Container>
     }
+    //render map if toggled on
     if (this.state.showMap) {
       return <div className="text-center" style={{ height: "900px", margin: "0px" }}><Button className="btn" style={{ margin: "5px" }} variant="info" onClick={this.toggleMap}>Toggle Map</Button><br></br><Map loadRecipeFromMap={this.loadRecipeFromMap} oldSelf={this} token={this.state.token} /></div>
     }
     //check for token
-    if (this.state.token) {
-      //if token is valid and user successfully authenticates, display main recipes page
-      if (this.state.isLoggedIn) {
-        let displayedRecipes = ""
+    if (this.state.token && this.state.isLoggedIn) {
+      //if token is valid and user successfully authenticates, display main recipes page for user
+      let displayedRecipes = ""
+      //if there is currently a non-empty search term string, only display filtered recipes
+      if (this.state.searchTerm !== "") {
+        displayedRecipes = <Row>{this.state.filtRecipes}</Row>
+      } else {
+        displayedRecipes = <Row>{this.state.recipes}</Row>
+      }
+      if (this.state.showMyRecipes) {
+        displayedRecipes = <Row>{this.state.myRecipes}</Row>
+      }
+      return (
+        <div>
+          <Container>
+            <h3 className="text-center"> Welcome {this.state.userData}, check out these Recipis!</h3>
+            <Form onSubmit={(e) => { e.preventDefault() }}>
+              <Form.Group controlId="formSearchTerms">
+                <Form.Control
+                  value={this.state.searchTerm}
+                  onChange={this.handleSearch}
+                  type="search"
+                  placeholder="Search Recipi titles ..." />
+              </Form.Group>
+            </Form>
+            <br></br>
+
+            <div className="text-center">
+              <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.showInput}>Post a Recipi</Button>
+              <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>
+              <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.toggleMap}>Toggle Map</Button>
+              <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={() => { this.loadRandomRecipe(this) }}>Choose For Me</Button>
+            </div>
+            <br></br>
+
+            {displayedRecipes}
+            <br></br>
+
+            <div className="text-center">
+              <Button className="btn" variant="secondary" onClick={() => { this.logout(this.state.token) }}>Logout</Button>
+            </div>
+          </Container>
+        </div>)
+        //if token is invalid, present guest page
+    
+    }
+    //if no token exists to authenticate or user is not logged in, present guest page
+    else if (!this.state.token || !this.state.isLoggedIn) {
+      let displayedRecipes = ""
         //if there is currently a non-empty search term string, only display filtered recipes
         if (this.state.searchTerm !== "") {
           displayedRecipes = <Row>{this.state.filtRecipes}</Row>
         } else {
           displayedRecipes = <Row>{this.state.recipes}</Row>
-        }
-        if (this.state.showMyRecipes) {
-          displayedRecipes = <Row>{this.state.myRecipes}</Row>
         }
 
         return (
@@ -189,8 +247,7 @@ class Home extends React.Component {
               <br></br>
 
               <div className="text-center">
-                <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.showInput}>Post a Recipi</Button>
-                <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.toggleMyRecipes}>{this.state.toggleMyRecipesText}</Button>
+                <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.goLogin}>Login/Register</Button>
                 <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={this.toggleMap}>Toggle Map</Button>
                 <Button className="btn" style={{ margin: "3px" }} variant="info" onClick={() => { this.loadRandomRecipe(this) }}>Choose For Me</Button>
               </div>
@@ -198,20 +255,10 @@ class Home extends React.Component {
 
               {displayedRecipes}
               <br></br>
-
-              <div className="text-center">
-                <Button className="btn" variant="secondary" onClick={() => { this.logout(this.state.token) }}>Logout</Button>
-              </div>
             </Container>
           </div>)
-      } else {
-        return (<Container><div className="text-center"><p>Loading ... </p></div></Container>)
-      }
     }
-    //if no token exists to authenticate, return to entrypage 
-    else if (!this.state.token) {
-      return (<div><Redirect to="/" /></div>)
-    }
+    
   }
 }
 

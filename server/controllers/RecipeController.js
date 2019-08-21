@@ -4,19 +4,10 @@ var jwt = require('jsonwebtoken');
 
 function show(req, res, next) {
   if (req.headers) {
-    var token = req.headers.token
     var username = req.headers.username
   } else {
     return res.send({ success: false, message: 'Error: Server error' })
   }
-    try {
-      let userData = jwt.verify(token, process.env.secretKey)
-    } catch (err) {
-      return res.send({
-        success: false,
-        message: "Bad, verification failed"
-      })
-    }
     Recipe.find({
         user: username
         }, (err, result) => {
@@ -30,15 +21,7 @@ function show(req, res, next) {
     });
 }
 function showOne(req, res, next) {
-  let { title, token } = req.body;
-  try {
-    let userData = jwt.verify(token, process.env.secretKey)
-  } catch (err) {
-    return res.send({
-      success: false,
-      message: "Bad, verification failed"
-    })
-  }
+  let { title } = req.body;
   Recipe.find({
     title: title
   }, (err, result) => {
@@ -52,19 +35,7 @@ function showOne(req, res, next) {
   })
 }
 function showAll(req, res, next) {
-  if (req.headers) {
-    var token = req.headers.token
-  } else {
-    return res.send({ success: false, message: 'Error: Server error' })
-  }
-  try {
-    let userData = jwt.verify(token, process.env.secretKey)
-  } catch (err) {
-    return res.send({
-      success: false,
-      message: "Bad, verification failed"
-    })
-  }
+
     Recipe.find({
         }, (err, result) => {
         if (err) {

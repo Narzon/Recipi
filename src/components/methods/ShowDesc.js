@@ -12,7 +12,7 @@ let showDesc = (recipe, ratingButtons, altGoBack, self) => {
     if (altGoBack) {
         goBack = altGoBack
     }
-    let newComponent = <RecipeDescription token={self.state.token} currentUser={self.state.userData} ratingButtons={ratingButtons} title={self.capitalize_Words(recipe.title)} user={recipe.user} imgSrc={recipe.image} elements={arrayOfElements} longDesc={recipe.longDescription} instructions={recipe.instructions} goBack={goBack} />
+    let newComponent = <RecipeDescription token={self.state.token} isLoggedIn={self.state.isLoggedIn} currentUser={self.state.userData} ratingButtons={ratingButtons} title={self.capitalize_Words(recipe.title)} user={recipe.user} imgSrc={recipe.image} elements={arrayOfElements} longDesc={recipe.longDescription} instructions={recipe.instructions} goBack={goBack} />
     self.setState({ recipeDescription: newComponent })
     window.scrollTo(0, 0)
 }

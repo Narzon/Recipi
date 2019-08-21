@@ -4,18 +4,9 @@ var jwt = require('jsonwebtoken');
 
 function showAll(req, res, next) {
   if (req.headers) {
-    var token = req.headers.token
     var recipe = req.headers.recipe
   } else {
     return res.send({ success: false, message: 'Error: Server error' })
-  }
-  try {
-    let userData = jwt.verify(token, process.env.secretKey)
-  } catch (err) {
-    return res.send({
-      success: false,
-      message: "Bad, verification failed"
-    })
   }
     Comment.find({ recipe: recipe
         }, (err, result) => {

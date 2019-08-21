@@ -10,11 +10,15 @@ class RecipeDescription extends React.Component {
             user: this.props.user,
             commentText: "",
             token: this.props.token,
-            comments: []
+            comments: [],
+            commentSubmit: false
         }
     }
     componentDidMount = () => {
         this.loadComments()
+        if (this.props.isLoggedIn) {
+            this.setState({commentSubmit: true})
+        }
 
     }
     handleChange = (e) => {
@@ -24,7 +28,6 @@ class RecipeDescription extends React.Component {
         return fetch('/api/comments', {
             method: 'GET',
             headers: {
-                'token': this.state.token,
                 'recipe': this.state.title
             },
         })
@@ -49,6 +52,10 @@ class RecipeDescription extends React.Component {
             commentText,
             token
         } = this.state;
+        if (!token) {
+            alert("log in to post comments!")
+            return
+        }
         let user = this.props.currentUser
         fetch('/api/comments', {
             method: 'POST',
@@ -67,17 +74,12 @@ class RecipeDescription extends React.Component {
 
     }
     render() {
-        return <Container>
-            <br></br>
-            <Button variant="info" onClick={this.props.goBack}>Go Back</Button>
-            <h1>{this.state.title}</h1> <p>by {this.state.user}</p>
-            <img className="img-fluid shadow-lg p-2 mb-3 rounded" style={{ "maxHeight": 550 }} src={this.props.imgSrc}></img>
-            {this.state.ratingButtons} <p style={{ margin: "2px", padding: "5px" }} >{this.props.longDesc}</p>
-            <div style={{ border: "2px solid #6EC2F0", margin: "2px", padding: "5px", borderRadius: "5px", backgroundColor: "#f5fcff" }}><br></br>{this.props.elements}<br></br><p>{this.props.instructions}</p></div>
-            <br></br>
-            <h3>Leave a comment below!</h3>
+        let comForm = <h3>Please log in to submit comments!</h3>
+        if (this.state.commentSubmit) {
+            comForm = 
             <Form
-                onSubmit={this.handleCommentSubmit}>
+            onSubmit={this.handleCommentSubmit}>
+                <h3>Leave a comment below!</h3>
                 <Form.Group controlId="commentInput">
                     <Form.Control
                         as="textarea"
@@ -94,6 +96,16 @@ class RecipeDescription extends React.Component {
                     Submit!
                     </Button>
             </Form>
+        }
+        return <Container>
+            <br></br>
+            <Button variant="info" onClick={this.props.goBack}>Go Back</Button>
+            <h1>{this.state.title}</h1> <p>by {this.state.user}</p>
+            <img className="img-fluid shadow-lg p-2 mb-3 rounded" style={{ "maxHeight": 550 }} src={this.props.imgSrc}></img>
+            {this.state.ratingButtons} <p style={{ margin: "2px", padding: "5px" }} >{this.props.longDesc}</p>
+            <div style={{ border: "2px solid #6EC2F0", margin: "2px", padding: "5px", borderRadius: "5px", backgroundColor: "#f5fcff" }}><br></br>{this.props.elements}<br></br><p>{this.props.instructions}</p></div>
+            <br></br>
+            {comForm}
             <br></br>
             {this.state.comments}
 
