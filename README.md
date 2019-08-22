@@ -6,7 +6,7 @@ Project created and maintained by Nicolai Antonov
 
 This web app seeks to provide registered users with the ability to submit custom Recipis, and then rank those recipes by aggregated votes. Other features include:
 - functioning comment field underneath each Recipi
-- instantaneous search bar
+- guest mode allows users to browse without authenticating, but not post/comment/rate
 - toggle to view only current user's posted Recipis
 - "Choose For Me" button to randomly select a Recipi
 - the option to input a Restaurant and City when submitting a Recipi, which then automatically places a marker at that restaurant location within the built-in Google Map component *
